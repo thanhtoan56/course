@@ -1,0 +1,115 @@
+{
+    "common": {
+      "select_lang": "Ngôn ngữ"
+    },
+    "header":{
+        "header-button": {
+            "header-button-right": {
+                "title-1": "Đăng Nhập",
+                "title-2": "Thông Báo",
+                "title-3": "Sản phẩm đã xem",
+                "title-4": "Trợ Giúp"
+            }
+        },
+        "header-middle": {
+            "header-middle-search": {
+                "placeholder": "Tìm sản phẩm, thương hiệu và tên shop"
+            }
+        },
+        "mobile": {
+            "menu": {
+                "title-1": "Trang chủ",
+                "title-2": "Danh mục sản phẩm",
+                "title-3": "Sản phẩm đã xem",
+                "title-4": "Đăng nhập",
+                "title-5": "Trợ giúp",
+                "title-6": "Ngôn ngữ",
+
+                "title-7": "Quản lý shop",
+                "title-8": "Đăng ký shop",
+                "title-9": "Tài khoản",
+                "title-10": "Đơn hàng đã mua",
+                "title-11": "Thông báo",
+                "title-12": "Đăng xuất"
+            },
+            "language": {
+                "lang-1": "Việt Nam",
+                "lang-2": "Hàn Quốc",
+                "lang-3": "English"
+            },
+            "input": "Tìm kiếm"
+        }
+    },
+    "footer": {
+        "head-footer": {
+            "title-left": "VỀ BLOOD SHOPPING MALL",
+            "title-center": "CHĂM SÓC KHÁCH HÀNG",
+            "title-first": "ĐƠN VỊ GIAO HÀNG",
+            "title-second": "THEO DÕI CHÚNG TÔI TRÊN",
+            "title-right-footer": "LIÊN QUAN",
+            "mobile": {
+                "title-1": "Tiết kiệm",
+                "title-2": "Thanh toán nhanh",
+                "title-3": "An toàn",
+                "certificate": "Giấy chứng nhận"
+            }
+        },
+        "footer-bottom": {
+            
+        }
+    },
+    "shop":{
+        "title-1":"THÔNG TIN VỀ SHOP",
+        "description":"MÔ TẢ",
+        "title-2":"SẢN PHẨM CỦA SHOP",
+        "nameShop": "Tên shop",
+        "phoneShop": "Số điện thoại",
+        "contact": "Liên hệ",
+        "address": "Địa chỉ",
+
+        "rest": "Còn lại",
+        "sale": "Giảm",
+        "message": "Đang cập nhật ..."
+    },
+    "product": {
+        "brand": "Thương hiệu",
+        "sku": "SKU",
+        "madeIn": "Xuất xứ",
+        "nameShop": "Tên shop",
+        "priceOrigin": "Giá",
+        "pricePromotion": "Giá sale",
+        "saving": "Tiết kiệm",
+        "rest": "Còn lại",
+        "buttonBuyCart": "Chọn mua",
+        "message": "Để biết thêm thông tin vê chính sách mua hàng tại Blood Shop, vui lòng click",
+        "clickHere": "tại đây",
+        
+        "infoDetailProduct": "THÔNG TIN CHI TIẾT",
+        "descriptionProduct": "MÔ TẢ SẢN PHẨM"
+    },
+    "search": {
+        "messageFound": "sản phẩm được tìm thấy với từ khóa là",
+        "messageNotFound": "Không tìm thấy sản phẩm có từ khóa là",
+        "rest": "Còn lại",
+        "sale": "Giảm"
+    },
+    "profile": {
+        "title": "Thông tin chi tiết",
+        "fullName": "Họ tên",
+        "phone": "Điện thoại",
+        "address": "Địa chỉ",
+        "email": "Email",
+        "username": "Username",
+        "walletAddress": "Ví Wallet",
+        "balance": "Số dư",
+        "buttonUpdateInfo": "Cập Nhật",
+        "buttonSendBlood": "Gửi Blood",
+        "buttonCreateWallet": "Tạo Ví",
+
+        "addressSender": "Ví gửi",
+        "addressReceiver": "Ví nhận",
+        "amount": "Nhập số blood",
+        "titleSendBlood": "Gửi Blood",
+        "buttonCancel": "Hủy"
+    }
+}

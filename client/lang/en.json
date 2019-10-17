@@ -1,0 +1,120 @@
+{
+    "common": {
+      "select_lang": "Language"
+    },
+    "header":{
+        "header-button": {
+            "header-button-right": {
+                "title-1": "Login",
+                "title-2": "Notification",
+                "title-3": "Seen",
+                "title-4": "Help"
+            }
+        },
+        "header-middle": {
+            "header-middle-search": {
+                "placeholder": "Find products, brands and shop names"
+            }
+        },
+        "mobile": {
+            "menu": {
+                "title-1": "Home",
+                "title-2": "Category",
+                "title-3": "Seen",
+                "title-4": "Login",
+                "title-5": "Help",
+                "title-6": "Language",
+
+                "title-7": "Shop manage",
+                "title-8": "Sign up shop",
+                "title-9": "Accout",
+                "title-10": "History orders",
+                "title-11": "Notifications",
+                "title-12": "Logout",
+                
+                "category": {
+
+                }
+            },
+            "language": {
+                "lang-1": "Vietnamese",
+                "lang-2": "Korea",
+                "lang-3": "English"
+            },
+            "input": "Search"
+        }
+    },
+    "footer": {
+        "head-footer": {
+            "title-left": "INFOMATION BLOOD SHOPPING MALL",
+            "title-center": "CUSTOMER CARE",
+            "title-first": "DELIVERY UNIT",
+            "title-second": "FOLLOW US ON",
+            "title-right-footer": "RELATE TO",
+            "mobile": {
+                "title-1": "Saving",
+                "title-2": "Fast payment",
+                "title-3": "Safe",
+                "certificate": "Certificate"
+            }
+        },
+        "footer-bottom": {
+            
+        }
+    },
+    "shop":{
+        "title-1":"INFOMATION SHOP",
+        "description":"DESCRIPTION",
+        "title-2":"PRODUCT OF SHOP",
+        "nameShop": "Name shop",
+        "phoneShop": "Phone",
+        "contact": "Contact",
+        "address": "Address",
+
+        "rest": "Rest",
+        "sale": "Sale",
+        "message": "Updating ..."
+    },
+    "product": {
+        "brand": "Brand",
+        "sku": "SKU",
+        "madeIn": "Made in",
+        "nameShop": "Name shop",
+        "priceOrigin": "Price",
+        "pricePromotion": "Price sale",
+        "saving": "Saving",
+        "rest": "Rest",
+        "buttonBuyCart": "Choose buy",
+        "message": "For more information on purchasing policies at Blood Shop, please click",
+        "clickHere": "here",
+        
+        "infoDetailProduct": "INFORMATION PRODUCT",
+        "descriptionProduct": "DESCRIPTION PRODUCT"
+    },
+    "search": {
+        "messageFound": "product is found with keywords:",
+        "messageNotFound": "Not found product with keywords",
+        "rest": "Rest",
+        "sale": "Sale"
+    },
+    "profile": {
+        "title": "Information Account",
+        "fullName": "Full name",
+        "phone": "Phone",
+        "address": "Address",
+        "email": "Email",
+        "username": "Username",
+        "walletAddress": "Wallet",
+        "balance": "Balance",
+        "buttonUpdateInfo": "Update Info",
+        "buttonSendBlood": "Send Blood",
+        "buttonCreateWallet": "Create Wallet",
+
+        "addressSender": "Address Sender",
+        "addressReceiver": "Address Receiver",
+        "amount": "Amount",
+        "titleSendBlood": "Send Blood",
+        "buttonCancel": "Cancel"
+    }
+    
+}
