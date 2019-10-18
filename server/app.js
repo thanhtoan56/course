@@ -71,6 +71,7 @@ require('./config/passport')(passport)
 // });
 
 const port = process.env.PORT || 8000; //set port 
+
 server.listen(port, () =>{
-    console.log("Server is up port: " + port);
+    console.log("Server is run port " + port);
 });

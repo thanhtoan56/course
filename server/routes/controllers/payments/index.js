@@ -3,7 +3,7 @@ const cron = require('node-cron');
 const router = express.Router();
 const axios = require('axios');
 const lodash = require('lodash');
-const bigDecimal = require('js-big-decimal');
+// const bigDecimal = require('js-big-decimal');
 const bodyParser = require('body-parser');
 
 const name_collection = "payments";
@@ -12,8 +12,6 @@ const name_collection_3 = "orders";
 
 require('../../../db/index');
 const check = require('../functions/general')
-const { system } = require('../../../config/app');
-const { calculatePercent, sendBlood }  = require('../functions/send_blood');
 const tool_insert_index_collection = require('../functions/insert_index_collection');
 
 const Users = require('../../../db/models/users/userSchema');
@@ -48,6 +46,7 @@ router.post('/statistics', async (req, res) => {
     
     } else return res.status(200).json({"successes":false,"reason":"User is not defined"})
 })
+
 // Quet Payment: Ko shop nao xac nhan thi xoa payment
 cron.schedule('* * * * * *', async () => {
     await Payments.find({"seller_confirm": false, "cancelled": 0, "completed": false, "created_timestamp":{$lt:parseInt(new Date / 1000) - 240}}).exec(async (err,payments) =>{
@@ -132,16 +131,6 @@ cron.schedule('* * * * * *', async () => {
                 await Orders.findOneAndUpdate({"id_number": orders[i].id_number}, orderUpdate)
 
                 const user = await Users.findOne({"id_number": payment.user_id})
-
-                // await axios.post('http://178.128.17.105:3113', {
-                //     "method":"sendfromaddress",
-                //     "params":[`${system.wallet_address}`, `${user.wallet_address}`, orders[i].total_pay],
-                //     "id":1,
-                //     "jsonrpc":"1.0",
-                //     "apikey":system.apikey,
-                //     timeout: system.timeout
-                // })
-                 
             }
         } 
     });
@@ -251,11 +240,6 @@ router.post('/', async (req, res) => {
             arrId.push(item.user_id)
             
         }
-        // Then send blood to wallet_address system
-        // Send and check status send blood successes ? true : false
-
-        // const data_send = await sendBlood(user.wallet_address, system.wallet_address, bigDecimal.round(total_pay, 5));
-        // if(data_send != true) return res.status(200).json({"successes": false, "reason": data_send })
 
         //  Set object để lưu trữ một tập hợp các giá trị duy nhất sau đó sử dụng toán tử trải rộng để xây dựng một mảng mới. //
         const arr_userIds = [...new Set(arrId)] 
@@ -471,10 +455,6 @@ router.post('/shop-cancel-order', async (req, res) => {
     const orderUpdate = { "cancelled": 2, "list_product": JSON.stringify(item_list_product) }
 
     // Tính tiền cho customer
-
-    // const data_send = await sendBlood(system.wallet_address, user.wallet_address, bigDecimal.round(order.total_pay, 5)) ;
-    // if(data_send != true) return res.status(200).json({"successes": false, "reason": data_send })
-    
     await Orders.findOneAndUpdate({"id_number": id_number}, orderUpdate).exec(async (err, data) =>{
         if(err || !data) return res.status(200).json({successes: false, reason: err.message })
         return res.status(200).json({successes:true, })
@@ -498,9 +478,6 @@ router.post('/user-cancel', async (req, res) => {
     if((checkUser.id_number === payments[0].user_id) || (checkUser.auth_admin === "Y")){
         
         // Send and check status send blood successes ? true : false
-        
-        // const data_send = await sendBlood(system.wallet_address, checkUser.wallet_address, calculatePercent( payments[0].total_pay)) ;
-        // if(data_send != true) return res.status(200).json({"successes": false, "reason": data_send })
         
         var list_product_payment = JSON.parse(payments[0].list_product)
         var orders = await Orders.find({"payment_id": id_number})
@@ -572,9 +549,6 @@ router.post('/user-received', async (req, res) => {
             
             // Tính tiền cho shop 
             // Send and check status send blood successes ? true : false
-
-            // const data_send = await sendBlood(system.wallet_address, user.wallet_address, calculatePercent(order.total_pay)) ;
-            // if(data_send != true) return res.status(200).json({"successes": false, "reason": data_send })
 
             const item_list_product = JSON.parse(order.list_product)
             var list_product_order_update = item_list_product.map((value, index, animals) => { value.state = 3; return value })

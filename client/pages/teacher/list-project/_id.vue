@@ -108,14 +108,12 @@
                 <div class="position-relative row form-group">
                     <label for="exampleText" class="col-sm-2 col-form-label">Mục tiêu đề tài</label>
                     <div class="col-sm-10">
-                        <!-- <textarea class="form-control" rows="6" v-model="projectTarget"></textarea> -->
                         <editor :html="editorHtml" mode="wysiwyg" :value="editorText" ref="projectTarget" v-model="projectTarget"/>
                     </div>
                 </div>
                 <div class="position-relative row form-group">
                     <label for="exampleText" class="col-sm-2 col-form-label">Yêu cầu kiến thức</label>
                     <div class="col-sm-10">
-                        <!-- <textarea class="form-control" rows="6" v-model="projectRequire"></textarea> -->
                         <editor :html="editorHtml" mode="wysiwyg" :value="editorText" ref="projectRequire" v-model="projectRequire"/>
                     </div>
                 </div>
@@ -163,7 +161,10 @@
                                         </div>
                                     </td>
                                     <td class="text-center">{{item.projectTypeName}}</td>
-                                    <td class="text-center"><div class="badge badge-warning">{{checkState(item)}}</div></td>
+                                    <td class="text-center">
+                                        <div class="badge badge-warning" v-if="item.isRatify == 'N'">{{checkState(item)}}</div>
+                                        <div class="badge badge-info" v-else>{{checkState(item)}}</div>
+                                    </td>
                                     <td class="text-center">
                                         <button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm" @click="showFormDetailProject(item)"><i class="pe-7s-look"></i></button>
                                         <button type="button" id="PopoverCustomT-1" class="btn btn-success btn-sm" @click="showFormUpdateProject(item)"><i class="pe-7s-pen"></i></button>
@@ -347,7 +348,7 @@
             },
 
             checkState(item){
-                if(item.isRatify == "N") return "Đang chờ.."
+                if(item.isRatify == "N") return "Đang chờ"
                 else return "Đã duyệt"
             },
             cancelAdd(){

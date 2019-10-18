@@ -1,8 +1,6 @@
 const nodemailer = require('nodemailer')
 const Hashids = require('hashids');
 
-
-const system = { wallet_address:"bYAUmep7ovEbZsKdq4qKsytrAnR6RrUGnx", apikey:"BLOOD-GXD2SSAW", timeout: 10000 }
 const key  = "1234Aabc@#";
 const keyCart = "bloodCompany"
 
@@ -32,4 +30,4 @@ function hashAuthen(emailUser) {
     return hashids.encode(timeNow);
 }
 
-module.exports = { sendEmail, hashAuthen, system, keyCart }
+module.exports = { sendEmail, hashAuthen, keyCart }

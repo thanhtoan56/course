@@ -1,26 +1,9 @@
-const express = require('express');
+// const express = require('express');
 const Users = require('../../../db/models/users/userSchema');
 const Tokens = require('../../../db/models/tokens/tokensSchema');
 const _ = require("lodash")
 
 module.exports = { 
-
-	async checkingToken(token){
-		var dataCallBack = []
-		var tokenData =  await Tokens.findOne({"token":token})
-		if (tokenData) { dataCallBack.push(tokenData['user_id']) }
-		else { dataCallBack.push("") }
-		return dataCallBack;
-	},
-	
-	async checkingUser(userid){
-		var dataCallBack = []
-		var userData = await Users.findOne({"id_number":Number(userid)})
-		
-		if (userData) { dataCallBack.push(userData) } 
-		else { dataCallBack.push("") }
-		return dataCallBack;
-	},
 
 	async checkToken2019(token){
 		var tokenData =  await Tokens.findOne({"token":token})

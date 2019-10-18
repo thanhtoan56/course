@@ -9,15 +9,23 @@ const projectsSchema = new mongoose.Schema({
 
 
     idNumber: {type: Number},
-    projectName: {type: String },//
+    projectName: {type: String },
     projectCode: {type: String },
     teacherCode: {type: String },
     teacherName: {type: String },
-    projectTarget: {type: String },//
-    projectRequire: {type: String },//
+    projectTarget: {type: String },
+    projectRequire: {type: String },
 
     isRatify:{type: String, default: "N"},
-    // listTeam: { type: Array, default: []},
+    teams: { type: Array, default: []},
+
+    // [
+    //     {
+    //         leaderCode: {type: String },
+    //         leaderName: {type: String },
+    //         members:    [{memberCode:    String, memberName: String}]
+    //     }
+    // ]
   
     created_at:{ type: Number, default: parseInt( new Date().getTime() / 1000 ) },
     updated_at:{ type: Number, default: parseInt( new Date().getTime() / 1000 ) }
