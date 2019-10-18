@@ -70,20 +70,48 @@ router.post('/add-project', async (req, res) => {
 
 router.post('/update-project', async (req,res) =>{
     
-    const {token, idNumber, projectTypeName } = req.body;
+    const { token, idNumber, idNumberProjectType, projectTypeName, projectName, projectTarget, projectRequire } = req.body;
 
     const checkToken = await check.checkToken(token)
     if(!checkToken.successes) return res.json({"successes":false, reason: checkToken.reason})
     const checkUser = checkToken.data;
 
-    if(checkUser.decentralise != "a" && checkUser.headOfChemistry != "y") return res.status(200).json({"successes":false,"reason":"You not have access"})
+    var projectDefine = await Projects.findOne({"idNumber": idNumber})
+    if(!projectDefine) return res.status(200).json({"successes":false, "reason":"project is not define"});
+
+    if(checkUser.code != projectDefine.teacherCode){
+        if(checkUser.decentralise != "a" ) return res.status(200).json({"successes":false,"reason":"You not have access"})
+    }
     
-    if(!idNumber || !projectTypeName ) return res.status(200).json({"successes":false,"reason":"Enter your full information"})
+    if( !idNumberProjectType || !projectTypeName || !projectName || !projectTarget || !projectRequire ) return res.status(200).json({"successes":false,"reason":"Enter your full information"})
     
-    var projectstype = {
-        "projectTypeName": projectTypeName 
-    };
-    await Projectstypes.findOneAndUpdate({"idNumber":idNumber}, projectstype, {new: true}).exec( (err,data) => {
+    const project = {
+        "idNumberProjectType"   : idNumberProjectType,//
+        "projectTypeName"       : projectTypeName,//
+        "projectName"           : projectName,//
+        "projectTarget"         : projectTarget,//
+        "projectRequire"        : projectRequire,//
+    }
+    await Projects.findOneAndUpdate({"idNumber":idNumber}, project, {new: true}).exec( (err,data) => {
+        if (err || !data)  return res.status(200).json({"successes":false,"reason":"Error!!"})
+        return res.status(200).json({"successes":true})
+    }); 
+});
+
+router.post('/ratify-project', async (req,res) =>{
+    
+    const { token, idNumber} = req.body;
+
+    const checkToken = await check.checkToken(token)
+    if(!checkToken.successes) return res.json({"successes":false, reason: checkToken.reason})
+    const checkUser = checkToken.data;
+
+    var projectDefine = await Projects.findOne({"idNumber": idNumber})
+    if(!projectDefine) return res.status(200).json({"successes":false, "reason":"project is not define"});
+    
+    if(checkUser.decentralise != "a" && checkUser.headOfChemistry != "y" ) return res.status(200).json({"successes":false,"reason":"You not have access"})
+    
+    await Projects.findOneAndUpdate({"idNumber":idNumber}, {isRatify: "Y"}, {new: true}).exec( (err,data) => {
         if (err || !data)  return res.status(200).json({"successes":false,"reason":"Error!!"})
         return res.status(200).json({"successes":true})
     }); 
@@ -92,14 +120,19 @@ router.post('/update-project', async (req,res) =>{
 router.post('/remove-project',async (req,res) =>{
     
     const {token, idNumber } = req.body;
-
+    
     const checkToken = await check.checkToken(token)
     if(!checkToken.successes) return res.json({"successes":false, reason: checkToken.reason})
     const checkUser = checkToken.data;
 
-    if(checkUser.decentralise != "a" && checkUser.headOfChemistry != "y") return res.status(200).json({"successes":false,"reason":"You not have access"})
+    var projectDefine = await Projects.findOne({"idNumber": idNumber})
+    if(!projectDefine) return res.status(200).json({"successes":false, "reason":"project is not define"});
+
+    if(checkUser.code != projectDefine.teacherCode){
+        if(checkUser.decentralise != "a" && checkUser.headOfChemistry != "y") return res.status(200).json({"successes":false,"reason":"You not have access"})
+    }
     
-    await Projectstypes.findOneAndRemove({"idNumber":idNumber}).exec( (err,data) => {
+    await Projects.findOneAndRemove({"idNumber":idNumber}).exec( (err,data) => {
         if (!data || err)  return res.status(200).json({"successes":false,"reason":"Error!!"})   
         return res.status(200).json({"successes":true})
     });

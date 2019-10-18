@@ -170,13 +170,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div style="text-align: center; padding: 10px 0; width: 100%;">
-                                    <button style="max-width: 50%" class="btn btn-secondary" @click="cancelAdd()">Cancel</button>
-                                    <button style="max-width: 50%" class="btn btn-success" @click="addSubject()">Submit</button>
-                                </div>
-                            </div>
                         </div>
+                    </div>
+                    <div style="text-align: center; padding: 10px 0;">
+                        <button style="max-width: 50%" class="btn btn-secondary" @click="cancelAdd()">Cancel</button>
+                        <button style="max-width: 50%" class="btn btn-success" @click="addSubject()">Submit</button>
                     </div>
                 </div>
             </div>
@@ -238,7 +236,7 @@
                 </ul>
             </div>
         </modal>
-    </div>
+    </div>                     
 </template>
 
 <script>
@@ -258,8 +256,12 @@
     export default {
         data(){
         	return{
+
+                
+				
                 data:[],
                 arrFillter: [],
+
                 subjectName:"", 
                 subjectCode:"",
                 idNumberSubject:0,
@@ -299,6 +301,7 @@
                 this.$modal.hide('FormdeleteSubject'); 
             },
 
+/////////////////////////////////////////////////////////////////
             updateSubject(){
                 
                 if(this.subjectCode == "") {
@@ -308,6 +311,7 @@
                     return this.$notify({group: 'auth',title: 'Notice', text: "Điền tên môn học !",type: 'warn'})
                 } 
                 else {
+
                     axios.post(`${this.$store.state.apiLink}/subject/update-subject`, {
                         "idNumber": this.idNumberSubject,
                         "subjectCode": this.subjectCode,
@@ -326,6 +330,7 @@
                     })
                     .catch(err => err);
                 }
+                
             },
 
             hidenFormUpdateSubject() { this.$modal.hide('FormUpdateSubject') },
@@ -336,6 +341,7 @@
                 this.subjectName = user.subjectName
                 this.$modal.show('FormUpdateSubject') 
             },
+///////////////////////////////////////////////////////////
 
         	ShowFormAdd(){
                 this.$modal.show('FormAddSubject')
@@ -352,7 +358,9 @@
                 this.idNumberSubject = 0
             },
 
+
             addSubject() {
+                
                 if(this.subjectCode == "" || this.subjectName == ""){
                     return this.$notify({group: 'auth',title: 'Notice', text: "Điền đầy đủ thông tin !" || "Error",type: 'warn'})
                 } else {
@@ -374,6 +382,7 @@
             },
 
             getAllSubject() {
+                
                 axios.get(`${this.$store.state.apiLink}/subject/list-subjects`)
                 .then(res => {
                     if(res.data.successes){

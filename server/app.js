@@ -70,8 +70,12 @@ require('./config/passport')(passport)
 //     res.sendFile(__dirname + `/uploads/contents/${image}`);
 // });
 
-const port = process.env.PORT || 8000; //set port 
+app.get("/:id", function(req, res) {
+	var image = req.params.id;
+    res.sendFile(__dirname + `/uploads/avatars/${image}`);
+});
 
+const port = process.env.PORT || 8000; //set port 
 server.listen(port, () =>{
-    console.log("Server is run port " + port);
+    console.log("Server is up port: " + port);
 });

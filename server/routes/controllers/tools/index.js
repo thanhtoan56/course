@@ -1,6 +1,6 @@
 
 const Users = require('../../../db/models/users/userSchema');
-const { Products } = require('../../../db/models/products/productSchema');
+const {Products} = require('../../../db/models/products/productSchema');
 
 async function validatorPhoneNumber(phone_number){
     if(phone_number.length < 8 || phone_number.length > 15) return new Promise((resolve, reject) => reject('Phone numbers cannot be greater than 15 characters or less than 8 characters !'));
@@ -54,6 +54,7 @@ async function getUserDetail(idNumber){ return await Users.findOne({"idNumber":i
 
 async function getUserDetailByCode(code){ return await Users.findOne({"code":code})}
 
+// Product
 async function validatorNameProduct (name_product){
     if(name_product.length < 5 ) return new Promise((resolve, reject) => reject('Name product cannot be less than 5 characters !'));
     else return true;
@@ -68,7 +69,7 @@ async function getLengthProductOfUser(user_id){ return await Products.find({"use
 async function getLengthProductIndex(){ return await Products.find({"showIndex": true, "total_quantity": {$gt: 0}}) }
 
 module.exports = {
-    checkPhoneNumber, checkEmail, checkfield, validatorPhoneNumber, getUserDetail,
-    validatorNameProduct, getProductDetail, getLengthProduct, getLengthProductIndex, getLengthProductOfUser, 
+    checkPhoneNumber, checkEmail, checkfield, validatorPhoneNumber, getUserDetail, validatorNameProduct, 
+    getProductDetail, getLengthProduct, getLengthProductIndex, getLengthProductOfUser, 
     checkUserName, validateEmail, getUserDetailByCode 
 };

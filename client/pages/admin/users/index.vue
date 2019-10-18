@@ -117,8 +117,8 @@
                         <small class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
                     </div>
                 </div> -->
-                <div class="position-relative row form-check" style="padding-right: 1.25rem;">
-                    <div style="float: right;">
+                <div class="position-relative row form-check">
+                    <div style="text-align: center;">
                         <button class="btn btn-secondary" @click="cancelAdd()">Cancel</button>
                         <button class="btn btn-success" @click="addUser()">Submit</button>
                     </div>

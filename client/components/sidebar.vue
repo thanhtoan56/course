@@ -1,4 +1,5 @@
 <template>
+    
     <div class="app-sidebar sidebar-shadow">
         <div class="app-header__logo">
             <div class="logo-src"></div>
@@ -93,7 +94,7 @@
                     </li>
 
                     <li class="app-sidebar__heading">Sinh viên</li>
-                    <li v-for="(item, i) in dataSubject" :key="i">
+                    <li v-for="(item, i) in dataSubject" :key="i+dataSubject.length+1">
                         <nuxt-link :to="''">
                             <i class="metismenu-icon pe-7s-diamond"></i>
                                 {{item.subjectName}}
@@ -101,7 +102,7 @@
                         </nuxt-link>
                         <ul class="mm-collapse">
                             <li>
-                                <nuxt-link to="/student/list-project">
+                                <nuxt-link :to="`/student/list-project/${item.subjectCode}`">
                                     <i class="metismenu-icon"></i>
                                     Danh sách đề tài
                                 </nuxt-link>
@@ -153,12 +154,14 @@
 
         created() {
             // this.getAllSubject()
+            // this.$forceUpdate()
         },
 
         computed: {},
 
         mounted() {
             this.getAllSubject()
+            this.$forceUpdate()
         },
 
         methods: {

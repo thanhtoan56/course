@@ -162,8 +162,8 @@
                                     </td>
                                     <td class="text-center">{{item.projectTypeName}}</td>
                                     <td class="text-center">
-                                        <div class="badge badge-warning" v-if="item.isRatify == 'N'">{{checkState(item)}}</div>
-                                        <div class="badge badge-info" v-else>{{checkState(item)}}</div>
+                                        <div v-if="item.isRatify == 'N'" class="badge badge-warning">{{checkState(item)}}</div>
+                                        <div v-else class="badge badge-info">{{checkState(item)}}</div>
                                     </td>
                                     <td class="text-center">
                                         <button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm" @click="showFormDetailProject(item)"><i class="pe-7s-look"></i></button>
@@ -184,50 +184,49 @@
         
         <modal name="FormDetailProject" width="auto" height="auto" :scrollable="true">
             <div class="modal" style="display: block; padding-left: 0px; top:60px;">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
+                <div class="modal-dialog modal-lg" style="height: 85%">
+                    <div class="modal-content" style="height: 100%;">
                         <div class="modal-header">
-                            <h5 class="modal-title">Chi tiết</h5>
+                            <h5 class="modal-title">Chi tiết đề</h5>
                             <button class="close" @click="closeFormDetailProject()"> <span>×</span> </button>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" style="overflow-y: scroll;">
                             <div>
                                 <b>Loại đề tài: </b> <span>{{project.projectTypeName}}</span>
                             </div>
                             <div>
-                                <b>Tên đề tài: </b> <p style="text-align: center;">{{project.projectName}}</p>
+                                <b>Tên đề tài: </b> <p style="text-align: center;"><b>{{project.projectName ? project.projectName.toUpperCase() : ""}}</b></p>
                             </div>
                             <div>
                                 <b>Giảng viên: </b> <span><i>{{project.teacherName}}</i></span>
                             </div>
                             <div>
                                 <b>Mục tiêu đề tài: </b>
-                                <div v-html=project.projectTarget></div>
+                                <div v-html="project.projectTarget"></div>
                             </div>
                             <div>
                                 <b>Yêu cầu kiến thức: </b>
-                                <div v-html=project.projectRequire></div>
+                                <div v-html="project.projectRequire"></div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" @click="closeFormDetailProject()">Close</button>
-                            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                            <button type="button" class="btn btn-primary" v-if="checkRatify()" @click="ratifyProject(project.idNumber)">Ratify</button>
                         </div>
                     </div>
                 </div>
             </div>
-            
         </modal>
 
         <modal name="FormUpdateProject" width="auto" height="auto" :scrollable="true">
             <div class="modal" style="display: block; padding-left: 0px; top:60px;">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
+                <div class="modal-dialog modal-lg" style="height: 85%;">
+                    <div class="modal-content" style="height: 100%;">
                         <div class="modal-header">
                             <h5 class="modal-title">Chi tiết</h5>
                             <button class="close" @click="closeFormUpdateProject()"> <span>×</span> </button>
                         </div>
-                        <div class="modal-body" style="max-height: 450px; overflow-y: scroll;">
+                        <div class="modal-body" style="overflow-y: scroll;">
                             <div class="position-relative row form-group">
                                 <label class="col-sm-2 col-form-label">Tên đề tài</label>
                                 <div class="col-sm-10">
@@ -238,12 +237,11 @@
                                 <label class="col-sm-2 col-form-label">Loại đề tài</label>
                                 <div class="col-sm-10">
                                     <select class="form-control" @change="onChang()">
-                                        <option :value="idNumberProjectType">Loại đề tài</option>  
-                                        <option v-for="item in listType" 
-                                            :key="item.idNumber" 
+                                        <option v-for="(item, index) in listType" 
+                                            :key="index" 
                                             :value="item.idNumber" 
                                             :data-foo="item.projectTypeName"
-                                            :selected="idNumberProjectType"
+                                            :selected="item.idNumber == idNumberProjectType"
                                         >
                                             {{item.projectTypeName}}
                                         </option>
@@ -253,7 +251,6 @@
                             <div class="position-relative row form-group">
                                 <label for="exampleText" class="col-sm-2 col-form-label">Mục tiêu đề tài</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" rows="6" v-model="projectTarget"></textarea>
                                     <editor :html="editorHtml" mode="wysiwyg" :value="editorText" ref="projectTarget" v-model="projectTarget"/>
                                 </div>
                             </div>
@@ -266,12 +263,32 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" @click="closeFormUpdateProject()">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-primary" @click="updateProject()">Save changes</button>
                         </div>
                     </div>
                 </div>
             </div>
             
+        </modal>
+
+        <modal name="FormDeleteProject" width="auto" height="auto" :scrollable="true">
+            <div class="modal" style="display: block; padding-left: 0px; top:60px;">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Xác nhận</h5>
+                            <button class="close" @click="cancelDelete()"> <span>×</span> </button>
+                        </div>
+                        <div class="modal-body">
+                            <label>Bạn có muốn xóa: <i><b>{{project.projectName}} ?</b></i></label>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" @click="cancelDelete()">Cancel</button>
+                            <button class="btn btn-danger" @click="deleteProject(project.idNumber)">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </modal>
     </div>
 </template>
@@ -305,6 +322,7 @@
                 listProject:[],
                 arrFillter:[],
 
+                idNumber: 0,
                 idNumberProjectType: 0, 
                 projectTypeName: "", 
                 projectName: "", 
@@ -325,15 +343,105 @@
         },
 
         methods:{
+            deleteProject(idNumber){
+                axios.post(`${this.$store.state.apiLink}/project/remove-project`, {
+                    "idNumber": idNumber,
+                    "token": localStorage.token || ""
+                })
+                .then(res => {
+                    if(res.data.successes){
+                        this.$notify({group: 'auth', title: 'Notice', text: 'Delete project success',type: 'success'});
+                        this.cancelDelete()
+                        this.getAllProjectType()
+                        this.getAllProject()
+                    } else {
+                        this.$notify({group: 'auth',title: 'Notice', text: res.data.reason, type: 'warn'})
+                    }
+                })
+            },
+
+            ShowFormDelete(item){
+                this.project = item
+                this.$modal.show('FormDeleteProject')
+            },
+
+            cancelDelete(){
+                this.project = ""
+                this.$modal.hide('FormDeleteProject')
+            },
+
+            ratifyProject(idNumber){
+                axios.post(`${this.$store.state.apiLink}/project/ratify-project`, {
+                    "idNumber": idNumber,
+                    "token": localStorage.token || ""
+                })
+                .then(res => {
+                    if(res.data.successes){
+                        this.$notify({group: 'auth', title: 'Notice', text: 'Ratify project success',type: 'success'});
+                        this.closeFormDetailProject()
+                        this.getAllProjectType()
+                        this.getAllProject()
+                    } else {
+                        this.$notify({group: 'auth',title: 'Notice', text: res.data.reason, type: 'warn'})
+                    }
+                })
+            },
+
+            checkRatify(){
+                if(this.project.isRatify == "Y") return false
+                else {
+                    if(this.$store.state.userInfo.data.headOfChemistry == "y" || this.$store.state.userInfo.data.decentralise == "a") return true
+                    else return false
+                }
+            },
+
+            updateProject(){
+                
+                this.projectTarget = this.$refs.projectTarget.invoke('getHtml')
+                this.projectRequire = this.$refs.projectRequire.invoke('getHtml')
+
+                if(this.idNumber == 0 || this.idNumberProjectType == 0 || this.projectTypeName == "" || this.projectName == "" || this.projectTarget == "" || this.projectRequire == ""){
+                    return this.$notify({group: 'auth',title: 'Notice', text: "Điền đầy đủ thông tin !",type: 'warn'})
+                } else {
+                    axios.post(`${this.$store.state.apiLink}/project/update-project`, {
+                        "idNumber": this.idNumber,
+                        "idNumberProjectType": this.idNumberProjectType, 
+                        "projectTypeName": this.projectTypeName, 
+                        "projectName": this.projectName, 
+                        "projectTarget": this.projectTarget, 
+                        "projectRequire": this.projectRequire,
+                        "token": localStorage.token || ""
+                    })
+                    .then(res => {
+                        if(res.data.successes){
+                            this.$notify({group: 'auth', title: 'Notice', text: 'Update project success',type: 'success'});
+                            this.closeFormUpdateProject()
+                            this.getAllProjectType()
+                            this.getAllProject()
+                        } else {
+                            this.$notify({group: 'auth',title: 'Notice', text: res.data.reason, type: 'warn'})
+                        }
+                    })
+                }
+            },
+
             closeFormUpdateProject(){
+                this.emptyForm()
                 this.$modal.hide('FormUpdateProject')
             },
 
-            showFormUpdateProject(){
+            showFormUpdateProject(item){
+                this.idNumber = item.idNumber
+                this.idNumberProjectType = item.idNumberProjectType
+                this.projectTypeName = item.projectTypeName
+                this.projectName = item.projectName
+                this.projectTarget = item.projectTarget
+                this.projectRequire = item.projectRequire
                 this.$modal.show('FormUpdateProject')
             },
-            //////////////////////
+            
             closeFormDetailProject(){
+                this.project = ""
                 this.$modal.hide('FormDetailProject')
             },
 
@@ -341,7 +449,7 @@
                 this.project = item
                 this.$modal.show('FormDetailProject')
             },
-            ////////////////////////////////
+
             filterProject(idNumber){ 
                 if(!this.arrFillter || this.arrFillter.length == 0) return ""
                 else return this.listProject = this.arrFillter.filter(item => item.idNumberProjectType == idNumber )
@@ -375,7 +483,7 @@
                     })
                     .then(res => {
                         if(res.data.successes){
-                            this.$notify({group: 'auth', title: 'Notice', text: 'Add projectstype success',type: 'success'});
+                            this.$notify({group: 'auth', title: 'Notice', text: 'Add project success',type: 'success'});
                             this.isShowFormAdd = false
                             this.emptyForm()
                             this.getAllProjectType()
@@ -393,7 +501,8 @@
             },
 
             emptyForm(){
-                this.idNumberProjectType = 0, 
+                this.idNumber = 0
+                this.idNumberProjectType = 0
                 this.projectTypeName = "" 
                 this.projectName = ""
                 this.teacherCode = ""

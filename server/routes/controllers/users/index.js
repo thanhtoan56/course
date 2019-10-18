@@ -41,10 +41,8 @@ router.post('/login', async function(req, res){
         await Users.findOne({"userName":userName,"passWord":sha256(passWord)}).exec(async function(err,data){
             if(err || !data) return res.status(200).json({"successes":false,"data":"User or password no valid"})
             
-            console.log(data)
             var timestamp = parseInt(new Date()/1000)
             var token = sha256(config.key + userName + timestamp)
-            console.log(token)
             
             var index = 0;
             const result = await indexS.findOne({'nameCollection': "token"});

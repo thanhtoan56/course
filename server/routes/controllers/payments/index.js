@@ -3,7 +3,7 @@ const cron = require('node-cron');
 const router = express.Router();
 const axios = require('axios');
 const lodash = require('lodash');
-// const bigDecimal = require('js-big-decimal');
+const bigDecimal = require('js-big-decimal');
 const bodyParser = require('body-parser');
 
 const name_collection = "payments";
@@ -46,7 +46,6 @@ router.post('/statistics', async (req, res) => {
     
     } else return res.status(200).json({"successes":false,"reason":"User is not defined"})
 })
-
 // Quet Payment: Ko shop nao xac nhan thi xoa payment
 cron.schedule('* * * * * *', async () => {
     await Payments.find({"seller_confirm": false, "cancelled": 0, "completed": false, "created_timestamp":{$lt:parseInt(new Date / 1000) - 240}}).exec(async (err,payments) =>{
@@ -131,6 +130,7 @@ cron.schedule('* * * * * *', async () => {
                 await Orders.findOneAndUpdate({"id_number": orders[i].id_number}, orderUpdate)
 
                 const user = await Users.findOne({"id_number": payment.user_id})
+
             }
         } 
     });
@@ -453,8 +453,7 @@ router.post('/shop-cancel-order', async (req, res) => {
     const user = await Users.findOne({"id_number": payment.user_id})
     
     const orderUpdate = { "cancelled": 2, "list_product": JSON.stringify(item_list_product) }
-
-    // Tính tiền cho customer
+    
     await Orders.findOneAndUpdate({"id_number": id_number}, orderUpdate).exec(async (err, data) =>{
         if(err || !data) return res.status(200).json({successes: false, reason: err.message })
         return res.status(200).json({successes:true, })
@@ -476,8 +475,6 @@ router.post('/user-cancel', async (req, res) => {
     } else return res.status(200).json({"successes":false,"reason":"Time out for cancel"})
     
     if((checkUser.id_number === payments[0].user_id) || (checkUser.auth_admin === "Y")){
-        
-        // Send and check status send blood successes ? true : false
         
         var list_product_payment = JSON.parse(payments[0].list_product)
         var orders = await Orders.find({"payment_id": id_number})
@@ -546,9 +543,7 @@ router.post('/user-received', async (req, res) => {
 
             var order = await Orders.findOne({"payment_id": id_number, "user_id": req.body.user_id_shop, "seller_confirm": true, "completed": false})
             const user = await Users.findOne({"id_number": order.user_id})
-            
-            // Tính tiền cho shop 
-            // Send and check status send blood successes ? true : false
+
 
             const item_list_product = JSON.parse(order.list_product)
             var list_product_order_update = item_list_product.map((value, index, animals) => { value.state = 3; return value })
