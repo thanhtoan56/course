@@ -93,31 +93,7 @@
                                             <div class="widget-content-wrapper">
                                                 <div class="widget-content-left mr-2">
                                                     <div class="custom-checkbox custom-control" style="padding-left: 0; padding-right: 1.5rem;">
-                                                        <input type="checkbox" >
-                                                    </div>
-                                                </div>
-                                                <div class="widget-content-left">
-                                                    <div><span>{{item.projectTypeName}}</span></div>
-                                                    <div>Mã d?: <b>{{item.projectCode}}</b></div>
-                                                    <div class="widget-heading"> {{item.projectName | truncate(60)}}</div>
-                                                    <div>GV: <i>{{item.teacherName}}</i></div>
-                                                </div>
-                                                <div class="widget-content-right">
-                                                    <div class="ml-2">
-                                                        <button type="button" class="btn btn-primary btn-sm" @click="showFormDetailProject(item)"><i class="pe-7s-look"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="list-group-item" v-for="(item, index) in listProject" :key="index">
-                                        <div class="todo-indicator bg-warning"></div>
-                                        <div class="widget-content p-0">
-                                            <div class="widget-content-wrapper">
-                                                <div class="widget-content-left mr-2">
-                                                    <div class="custom-checkbox custom-control" style="padding-left: 0; padding-right: 1.5rem;">
-                                                        <input type="checkbox" >
+                                                        <input type="checkbox" name="checked" :value="item.projectCode">
                                                     </div>
                                                 </div>
                                                 <div class="widget-content-left">
@@ -233,7 +209,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" @click="closeFormRegistration()">Close</button>
-                            <button type="button" class="btn btn-primary" @click="updateProject()">Save changes</button>
+                            <button type="button" class="btn btn-primary" @click="registration()">Save changes</button>
                         </div>
                     </div>
                 </div>
@@ -304,6 +280,8 @@
 
                 //////////////////////////
                 teams:[],
+                projects:[],
+                types:[],
                 memberCode: "", 
                 memberName: "",
         	}
@@ -359,26 +337,20 @@
                 })
             },
 
-            updateProject(){
-                
-                this.projectTarget = this.$refs.projectTarget.invoke('getHtml')
-                this.projectRequire = this.$refs.projectRequire.invoke('getHtml')
-
-                if(this.idNumber == 0 || this.idNumberProjectType == 0 || this.projectTypeName == "" || this.projectName == "" || this.projectTarget == "" || this.projectRequire == ""){
-                    return this.$notify({group: 'auth',title: 'Notice', text: "Điền đầy đủ thông tin !",type: 'warn'})
+            registration(){
+                if(this.teams == "" || this.projects == ""){
+                    return this.$notify({group: 'auth',title: 'Notice', text: "Thành viên trống hoặc danh sách đề trống",type: 'warn'})
+                } else if(this.types.length != 1){
+                    return this.$notify({group: 'auth',title: 'Notice', text: "Vui lòng chọn đúng loại đề tài khi đăng ký",type: 'warn'}) 
                 } else {
-                    axios.post(`${this.$store.state.apiLink}/project/update-project`, {
-                        "idNumber": this.idNumber,
-                        "idNumberProjectType": this.idNumberProjectType, 
-                        "projectTypeName": this.projectTypeName, 
-                        "projectName": this.projectName, 
-                        "projectTarget": this.projectTarget, 
-                        "projectRequire": this.projectRequire,
+                    axios.post(`${this.$store.state.apiLink}/registration/add-registration`, {
+                        "members": this.teams,
+                        "projects": this.projects,
                         "token": localStorage.token || ""
                     })
                     .then(res => {
                         if(res.data.successes){
-                            this.$notify({group: 'auth', title: 'Notice', text: 'Update project success',type: 'success'});
+                            this.$notify({group: 'auth', title: 'Notice', text: 'Registration project success',type: 'success'});
                             this.closeFormRegistration()
                             this.getAllProjectType()
                             this.getAllProject()
@@ -390,13 +362,12 @@
             },
 
             addMember(){
-                console.log(this.memberCode) 
-                console.log(this.memberName)
+                
                 var item = {}
                 item.memberCode = this.memberCode
                 item.memberName = this.memberName
                 this.teams.push(item)
-                console.log(this.teams)
+
                 this.memberCode = ""
                 this.memberName = ""
             },
@@ -404,18 +375,39 @@
             closeFormRegistration(){
                 this.emptyForm()
                 this.teams = []
+                $('input[type=checkbox]').each(function(){  this.checked = false; });
                 this.$modal.hide('FormRegistration')
             },
 
-            // showFormRegistration(item){
             showFormRegistration(){
-                // var item = {}
-                // item.memberCode = this.$store.state.userInfo.data.code
-                // item.memberName = this.$store.state.userInfo.data.fullName
-                // this.teams.push(item)
-                this.memberCode = this.$store.state.userInfo.data.code
-                this.memberName = this.$store.state.userInfo.data.fullName
-                this.$modal.show('FormRegistration')
+                var arr = []
+                var arrSend = []
+                $("input:checkbox[name=checked]:checked").each(function(){ arr.push($(this).val()); });
+                
+                if(arr == "") return this.$notify({group: 'auth', title: 'Notice', text: 'Vui lòng chọn đề tài', type: 'warn'});
+                else if(arr.length > 3) return this.$notify({group: 'auth', title: 'Notice', text: 'Mỗi nhóm chỉ đăng ký được 3 đề tài. Vui lòng chọn lại đề tài', type: 'warn'});
+                else if(arr.length < 3 ) return this.$notify({group: 'auth', title: 'Notice', text: 'Mỗi nhóm đăng ký được 3 đề tài. Vui lòng chọn thêm đề tài', type: 'warn'});
+                else {
+                    for(let i = 0; i < arr.length; i++){  arrSend.push(this.listProject.find(item => item.projectCode == arr[i]))  }
+
+                    var arrType = []
+                    for(let i = 0; i < arrSend.length; i++){  
+                        arrSend[i].state = 0
+                        delete arrSend[i].isRatify  
+                        delete arrSend[i].teams  
+
+                        arrType.push(arrSend[i].idNumberProjectType)
+                    }
+                    this.types = [...new Set(arrType)]
+                    if(this.types.length != 1){
+                        return this.$notify({group: 'auth',title: 'Notice', text: "Vui lòng chọn đúng loại đề tài khi đăng ký",type: 'warn'}) 
+                    } else {
+                        this.projects = arrSend
+                        this.memberCode = this.$store.state.userInfo.data.code
+                        this.memberName = this.$store.state.userInfo.data.fullName
+                        this.$modal.show('FormRegistration')
+                    }
+                }
             },
             
             closeFormDetailProject(){
@@ -487,7 +479,6 @@
             },
 
             getAllProjectType() {
-                
                 axios.post(`${this.$store.state.apiLink}/projectstype/list-projectstype-by-subjectcode`,{
                     "subjectCode": this.$route.params.id,
                 })
@@ -500,8 +491,8 @@
             },
 
             getAllProject() {
-                
                 axios.post(`${this.$store.state.apiLink}/project/list-project-by-subjectcode`,{
+                // axios.post(`${this.$store.state.apiLink}/project/list-project`,{
                     "subjectCode": this.$route.params.id,
                 })
                 .then(res => {

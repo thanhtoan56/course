@@ -18,10 +18,18 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 
-// get project type by subjectCode
+// get project by subjectCode
 router.post('/list-project-by-subjectcode', async (req, res) => {
     const { subjectCode } = req.body;
-    await Projects.find({"subjectCode":subjectCode},{ _id:0}).sort({idNumber: -1})
+    await Projects.find({"subjectCode":subjectCode},{ _id:0, __v:0}).sort({idNumber: -1})
+    .then(result => res.status(200).json({"successes":true,"data":result}))
+    .catch((err) => res.status(200).json({"successes":false,"reason":err}));
+});
+
+// get project isRatify == "Y"  by subjectCode
+router.post('/list-project', async (req, res) => {
+    const { subjectCode } = req.body;
+    await Projects.find({"subjectCode":subjectCode, isRatify: "Y"},{ _id:0, __v:0}).sort({idNumber: -1})
     .then(result => res.status(200).json({"successes":true,"data":result}))
     .catch((err) => res.status(200).json({"successes":false,"reason":err}));
 });
