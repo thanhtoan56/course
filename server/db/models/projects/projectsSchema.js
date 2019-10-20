@@ -17,7 +17,7 @@ const projectsSchema = new mongoose.Schema({
     projectRequire: {type: String },
 
     isRatify:{type: String, default: "N"},
-    teams: { type: Array, default: []},
+    // teams: { type: Array, default: []},
 
     // [
     //     {

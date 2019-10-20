@@ -2,13 +2,26 @@ const mongoose = require('mongoose');
 
 const registrationsSchema = new mongoose.Schema({
 
-    idNumber: {type: Number},
-    idNumberProjectType: {type: Number},
-    leaderCode: {type: String },
-    leaderName: {type: String },
+    subjectName: {type: String},
+    subjectCode: {type: String},
 
+    idNumberProjectType: {type: Number },
+    projectTypeName: {type: String },
+
+    projectName: {type: String },
+    projectCode: {type: String },
+
+    teacherCode: {type: String },
+    teacherName: {type: String },
+
+    projectTarget: {type: String },
+    projectRequire: {type: String },
+
+    idNumber: {type: Number},
+    leaderCode: {type: String },
+    leaderName: {type: String }, 
     members: { type: Array, default: []},   // [{memberCode:    String, memberName: String}]
-    projects: { type: Array, default: []},  // [{projectCode:     String, state:      default: 0}]
+    state: { type: Number, default: 0},
   
     created_at:{ type: Number, default: parseInt( new Date().getTime() / 1000 ) },
     updated_at:{ type: Number, default: parseInt( new Date().getTime() / 1000 ) }

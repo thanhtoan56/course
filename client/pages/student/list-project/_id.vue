@@ -491,8 +491,8 @@
             },
 
             getAllProject() {
-                axios.post(`${this.$store.state.apiLink}/project/list-project-by-subjectcode`,{
-                // axios.post(`${this.$store.state.apiLink}/project/list-project`,{
+                // axios.post(`${this.$store.state.apiLink}/project/list-project-by-subjectcode`,{
+                axios.post(`${this.$store.state.apiLink}/project/list-project`,{
                     "subjectCode": this.$route.params.id,
                 })
                 .then(res => {
