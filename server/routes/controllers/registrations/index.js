@@ -105,12 +105,68 @@ router.post('/add-registration', async (req, res) => {
     return res.status(200).json({"successes":true})
 });
 
-router.post('/remove-registration',async (req,res) =>{
+router.post('/confirm-registration',async (req,res) =>{
+    const { token, idNumber, idNumberProjectType, leaderCode } = req.body;
+
+    const checkToken = await check.checkToken(token)
+    if(!checkToken.successes) return res.json({"successes":false, reason: checkToken.reason})
+    const checkUser = checkToken.data;
+
+
+    var registration = await Registrations.findOne({"idNumber": idNumber})
+    if(!registration) return res.status(200).json({"successes":false, "reason":"Registration is not define"});
+
+    if(checkUser.code != registration.teacherCode){
+        if(checkUser.decentralise != "a" ) return res.status(200).json({"successes":false,"reason":"You not have access"})
+    }
+
+    if(registration.state > 0) return res.status(200).json({"successes":false, "reason":"You have either confirmed or canceled"});
+
+    var registrations = await Registrations.find({"idNumberProjectType": idNumberProjectType, "leaderCode":leaderCode})
+    if(!registrations) return res.status(200).json({"successes":false, "reason":"Registrations is not define"});
     
-    // await Registrations.findOneAndRemove({"idNumber":idNumber}).exec( (err,data) => {
-    //     if (!data || err)  return res.status(200).json({"successes":false,"reason":"Error!!"})   
-    //     return res.status(200).json({"successes":true})
-    // });
+    //Cancel the remaining projects
+    for(let i = 0; i < registrations.length; i++){ 
+        if(registrations[i].idNumber != idNumber && registrations[i].state == 0) await Registrations.findOneAndUpdate({"idNumber":registrations[i].idNumber}, {"state": 2 })
+    }
+
+    await Registrations.findOneAndUpdate({"idNumber":idNumber}, {"state": 1 }).exec( (err,data) => {
+        if (!data || err)  return res.status(200).json({"successes":false,"reason":"Error!!"})   
+        return res.status(200).json({"successes":true})
+    });
+});
+
+router.post('/cancel-registration',async (req,res) =>{
+    const { token, idNumber, idNumberProjectType, leaderCode } = req.body;
+
+    const checkToken = await check.checkToken(token)
+    if(!checkToken.successes) return res.json({"successes":false, reason: checkToken.reason})
+    const checkUser = checkToken.data;
+
+
+    var registration = await Registrations.findOne({"idNumber": idNumber})
+    if(!registration) return res.status(200).json({"successes":false, "reason":"Registration is not define"});
+
+    if(checkUser.code != registration.teacherCode){
+        if(checkUser.decentralise != "a" ) return res.status(200).json({"successes":false,"reason":"You not have access"})
+    }
+
+    if(registration.state > 0) return res.status(200).json({"successes":false, "reason":"You have either confirmed or canceled"});
+
+    var registrations = await Registrations.find({"idNumberProjectType": idNumberProjectType, "leaderCode":leaderCode})
+    if(!registrations) return res.status(200).json({"successes":false, "reason":"Registrations is not define"});
+    
+    //check state in list registration
+    var arrState = []
+    for(let i = 0; i < registrations.length; i++){ 
+        if(registrations[i].state == 0) arrState.push(registrations[i])
+    }
+    if(arrState.length == 1 && arrState[0].idNumber == idNumber) return res.status(200).json({"successes":false,"reason":"Can't cancel because they only have this project"})
+
+    await Registrations.findOneAndUpdate({"idNumber":idNumber}, {"state": 2 }).exec( (err,data) => {
+        if (!data || err)  return res.status(200).json({"successes":false,"reason":"Error!!"})   
+        return res.status(200).json({"successes":true})
+    });
 });
 
 module.exports = router

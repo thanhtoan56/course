@@ -36,85 +36,94 @@
                 <ul class="vertical-nav-menu metismenu">
                     <li class="app-sidebar__heading">Dashboards</li>
                     <li>
-                        <a href="#" class="mm-active">
+                        <nuxt-link to="/" class="mm-active">
                             <i class="metismenu-icon pe-7s-study"></i>
                             Trang chủ
-                        </a>
-                    </li>
-                    <li class="app-sidebar__heading">Admin</li>
-                    <li>
-                        <nuxt-link to="/admin/users">
-                            <i class="metismenu-icon pe-7s-user"></i>
-                            User
-                            <i class="metismenu-state-icon caret-left"></i>
                         </nuxt-link>
-                    </li>
-                    <li>
-                        <nuxt-link to="/admin/subjects">
-                            <i class="metismenu-icon pe-7s-bookmarks"></i>
-                            Môn học
-                            <i class="metismenu-state-icon caret-left"></i>
-                        </nuxt-link>
-                    </li>
-                    <li>
-                        <nuxt-link to="#">
-                            <i class="metismenu-icon pe-7s-notebook"></i>
-                            Đề tài
-                        </nuxt-link>
-                    </li>
-                    
-                    
-                    <li class="app-sidebar__heading">Giảng viên</li>
-                    <li v-for="(item, index) in dataSubject" :key="index">
-                        <nuxt-link :to="''">
-                            <i class="metismenu-icon pe-7s-diamond"></i>
-                                {{item.subjectName}}
-                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                        </nuxt-link>
-                        <ul class="mm-collapse">
-                            <li>
-                                <nuxt-link :to="`/teacher/list-project/${item.subjectCode}`">
-                                    <i class="metismenu-icon"></i>
-                                    Danh sách đề tài
-                                </nuxt-link>
-                            </li>
-                            <li>
-                                <nuxt-link :to="`/teacher/list-type-project/${item.subjectCode}`">
-                                    <i class="metismenu-icon"></i>
-                                    Danh sách loại đề tài
-                                </nuxt-link>
-                            </li>
-                            <li>
-                                <nuxt-link to="/teacher/registration-results">
-                                    <i class="metismenu-icon"></i>
-                                    Kết quả đăng ký
-                                </nuxt-link>
-                            </li>
-                        </ul>
                     </li>
 
-                    <li class="app-sidebar__heading">Sinh viên</li>
-                    <li v-for="(item, i) in dataSubject" :key="i+dataSubject.length+1">
-                        <nuxt-link :to="''">
-                            <i class="metismenu-icon pe-7s-diamond"></i>
-                                {{item.subjectName}}
-                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                        </nuxt-link>
-                        <ul class="mm-collapse">
-                            <li>
-                                <nuxt-link :to="`/student/list-project/${item.subjectCode}`">
-                                    <i class="metismenu-icon"></i>
-                                    Danh sách đề tài
-                                </nuxt-link>
-                            </li>
-                            <li>
-                                <nuxt-link to="/student/registration-results">
-                                    <i class="metismenu-icon"></i>
-                                    Kết quả đăng ký
-                                </nuxt-link>
-                            </li>
-                        </ul>
-                    </li>
+                    <!-- Admin -->
+                    <template v-if="checkSidebar()">
+                        <li class="app-sidebar__heading">Admin</li>
+                        <li>
+                            <nuxt-link to="/admin/users">
+                                <i class="metismenu-icon pe-7s-user"></i>
+                                User
+                                <i class="metismenu-state-icon caret-left"></i>
+                            </nuxt-link>
+                        </li>
+                        <li>
+                            <nuxt-link to="/admin/subjects">
+                                <i class="metismenu-icon pe-7s-bookmarks"></i>
+                                Môn học
+                                <i class="metismenu-state-icon caret-left"></i>
+                            </nuxt-link>
+                        </li>
+                        <li>
+                            <nuxt-link to="#">
+                                <i class="metismenu-icon pe-7s-notebook"></i>
+                                Đề tài
+                            </nuxt-link>
+                        </li>
+                    </template>
+                    
+                    <!-- Giảng viên -->
+                    <template v-if="userInfo.decentralise != 's'">
+                        <li class="app-sidebar__heading">Danh sách môn học</li>
+                        <li v-for="(item, index) in dataSubject" :key="index" @click="showSubmenu(index)" :id="`liCollapse${index}`">
+                            <nuxt-link :to="''">
+                                <i class="metismenu-icon pe-7s-diamond"></i>
+                                    {{item.subjectName}}
+                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                            </nuxt-link>
+                            <ul class="mm-collapse" :id="`collapse${index}`">
+                                <li>
+                                    <nuxt-link :to="`/teacher/list-project/${item.subjectCode}`">
+                                        <i class="metismenu-icon"></i>
+                                        Danh sách đề tài
+                                    </nuxt-link>
+                                </li>
+                                <li>
+                                    <nuxt-link :to="`/teacher/list-type-project/${item.subjectCode}`">
+                                        <i class="metismenu-icon"></i>
+                                        Danh sách loại đề tài
+                                    </nuxt-link>
+                                </li>
+                                <li>
+                                    <nuxt-link :to="`/teacher/registration-results/${item.subjectCode}`">
+                                        <i class="metismenu-icon"></i>
+                                        Kết quả đăng ký
+                                    </nuxt-link>
+                                </li>
+                            </ul>
+                        </li>
+                    </template>
+
+                    <!-- Sinh viên -->
+                    <template v-if="userInfo.decentralise != 't'">
+                        <li class="app-sidebar__heading">Danh sách môn học</li>
+                        <li v-for="(item, i) in dataSubject" :key="i+dataSubject.length+1" @click="showSubmenu(i+dataSubject.length+1)" :id="`liCollapse${i+dataSubject.length+1}`">
+                            <nuxt-link :to="''">
+                                <i class="metismenu-icon pe-7s-diamond"></i>
+                                    {{item.subjectName}}
+                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                            </nuxt-link>
+                            <ul class="mm-collapse " :id="`collapse${i+dataSubject.length+1}`">
+                                <li>
+                                    <nuxt-link :to="`/student/list-project/${item.subjectCode}`">
+                                        <i class="metismenu-icon"></i>
+                                        Danh sách đề tài
+                                    </nuxt-link>
+                                </li>
+                                <li>
+                                    <nuxt-link :to="`/student/registration-results/${item.subjectCode}`">
+                                        <i class="metismenu-icon"></i>
+                                        Kết quả đăng ký
+                                    </nuxt-link>
+                                </li>
+                            </ul>
+                        </li>
+                    </template>
                 </ul>
             </div>
         </div>
@@ -132,7 +141,6 @@
     import VueLoading from "vuejs-loading-plugin";
     import passwordValidator from "password-validator";
     import mixinsResponsive from "~/functions/responsiveGlobal";
-    import HeaderMobile from "~/components/client/headermobile";
     import i18n from "~/lang/i18n.js";
 
     import _ from "lodash";
@@ -144,17 +152,16 @@
     var md5 = require("md5");
     Vue.use(Toaster, { timeout: 10000 });
     export default {
-        components: { HeaderMobile },
         i18n,
         data() {
             return {
-                dataSubject:[]
+                dataSubject:[],
+                userInfo: ""
             };
         },
 
         created() {
-            // this.getAllSubject()
-            // this.$forceUpdate()
+            this.checkSidebar()
         },
 
         computed: {},
@@ -165,8 +172,17 @@
         },
 
         methods: {
+            checkSidebar() {
+                if(this.$store.state.userInfo && this.$store.state.userInfo != ""){
+                    if(this.$store.state.userInfo.data && this.$store.state.userInfo.data != ""){
+                        this.userInfo = this.$store.state.userInfo.data
+                        if(this.userInfo.decentralise == "a")
+                        return true
+                    } else return false
+                } else return false 
+            },
+
             getAllSubject() {
-                        
                 axios.get(`${this.$store.state.apiLink}/subject/list-subjects`)
                 .then(res => {
                     if(res.data.successes){
@@ -175,6 +191,10 @@
                 })
                 .catch(err => err);
             },
+            showSubmenu(id){
+                $("#collapse"+id).toggleClass("mm-show")
+                $("#liCollapse"+id).toggleClass("mm-active")
+            }
         }
     };
 </script>

@@ -20,11 +20,18 @@
             </div>
         </div>
         <div class="app-header__mobile-menu">
-            <div>
-                <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
-                    <span class="hamburger-box">
-                        <span class="hamburger-inner"></span>
-                    </span>
+            <div id="btnShowSideBarMobile">
+                <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav" >
+                    <template v-if="isShowButtonSideBarMobile">
+                        <span class="hamburger-box" @click="showSidebarMobile()">
+                            <span class="hamburger-inner"></span>
+                        </span>
+                    </template>
+                    <template v-else>
+                        <span class="hamburger-box" @click="hideSidebarMobile()">
+                            <span class="hamburger-inner"></span>
+                        </span>
+                    </template>
                 </button>
             </div>
         </div>
@@ -36,7 +43,7 @@
                     </span>
                 </button>
             </span>
-        </div>    
+        </div>
         <div class="app-header__content">
             <div class="app-header-left">
                 <div class="search-wrapper">
@@ -67,7 +74,8 @@
                             Settings
                         </a>
                     </li>
-                </ul>        </div>
+                </ul>
+            </div>
             <div class="app-header-right">
                 <div class="header-btn-lg pr-0">
                     <div class="widget-content p-0">
@@ -75,32 +83,31 @@
                             <div class="widget-content-left">
                                 <div class="btn-group">
                                     <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                        <img width="42" class="rounded-circle" src="/assets/images/avatars/1.jpg" alt="">
+                                        <!-- <img width="42" class="rounded-circle" src="/assets/images/avatars/1.jpg" alt=""> -->
+                                        <img width="42" class="rounded-circle" src="/assets/images/avatars/user.jpg" alt="">
                                         <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                     </a>
                                     <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                        <button type="button" tabindex="0" class="dropdown-item">User Account</button>
+                                        <!-- <button type="button" tabindex="0" class="dropdown-item">User Account</button>
                                         <button type="button" tabindex="0" class="dropdown-item">Settings</button>
                                         <h6 tabindex="-1" class="dropdown-header">Header</h6>
                                         <button type="button" tabindex="0" class="dropdown-item">Actions</button>
+                                        <div tabindex="-1" class="dropdown-divider"></div> -->
+                                        <button type="button" tabindex="0" class="dropdown-item" @click="changePassword()">Change password</button>
                                         <div tabindex="-1" class="dropdown-divider"></div>
                                         <button type="button" tabindex="0" class="dropdown-item" @click="userLogout()">Logout</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="widget-content-left  ml-3 header-user-info">
-                                <div class="widget-heading">
-                                    Alina Mclourd
-                                </div>
-                                <div class="widget-subheading">
-                                    VP People Manager
-                                </div>
+                                <div class="widget-heading">{{userInfo ? userInfo.fullName : ""}}</div>
+                                <div class="widget-subheading">{{userInfo ? userInfo.code: ""}}</div>
                             </div>
-                            <div class="widget-content-right header-user-info ml-3">
+                            <!-- <div class="widget-content-right header-user-info ml-3">
                                 <button type="button" class="btn-shadow p-1 btn btn-primary btn-sm show-toastr-example">
                                     <i class="fa text-white fa-calendar pr-1 pl-1"></i>
                                 </button>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>        
@@ -119,8 +126,7 @@
     import Notifications from 'vue-notification';
     import VueLoading from 'vuejs-loading-plugin';
     import passwordValidator from 'password-validator';
-    import mixinsResponsive from '~/functions/responsiveGlobal'
-    import HeaderMobile from '~/components/client/headermobile';
+    import mixinsResponsive from '~/functions/responsiveGlobal';
     import i18n from '~/lang/i18n.js';
 
     import _ from 'lodash';
@@ -132,24 +138,39 @@
     var md5 = require('md5');
     Vue.use(Toaster, {timeout: 10000});
     export default {
-        components:{ HeaderMobile },
         i18n,
         data() {
             return {
                 isShowButtonSideBar: true,
+                isShowButtonSideBarMobile: true,
                 isShowInputSearch: true,
+                userInfo: ""
             };
         },
         
-        created() { },
+        created() { 
+            this.check()
+        },
 
-        computed: { },
+        computed: { 
+            
+        },
         
-        mounted(){ },
+        mounted(){  },
         
         watch: { },
         
         methods: {
+
+            check() {
+                if(this.$store.state.userInfo && this.$store.state.userInfo != ""){
+                    if(this.$store.state.userInfo.data && this.$store.state.userInfo.data != ""){
+                        this.userInfo = this.$store.state.userInfo.data
+                        return this.$store.state.userInfo.data
+                    } else return this.$router.replace({path:'/login'}) 
+                } else return this.$router.replace({path:'/login'}) 
+            },
+
             userLogout(){ 
                 this.$store.dispatch('clearAutUser',true);  
                 this.$router.push({path:'/login'})
@@ -158,6 +179,21 @@
             search(){
 
             },
+
+            //  Mobile  //
+            hideSidebarMobile(){
+                this.isShowButtonSideBarMobile = !this.isShowButtonSideBarMobile
+                this.$nuxt.$emit("hideSidebarMobile", true)
+                $("#btnShowSideBarMobile"+ " button").removeClass('is-active')
+            },
+            showSidebarMobile(){
+                this.isShowButtonSideBarMobile = !this.isShowButtonSideBarMobile
+                this.$nuxt.$emit("showSidebarMobile", true)
+                $("#btnShowSideBarMobile"+ " button").addClass('is-active')
+            },
+            //////////////
+
+
             showInputSearch(){
                 this.isShowInputSearch = !this.isShowInputSearch
                 $(".app-header-left"+ " div").addClass('active')
@@ -166,6 +202,7 @@
                 this.isShowInputSearch = !this.isShowInputSearch
                 $(".app-header-left"+ " div").removeClass('active')
             },
+
             hideSidebar(){
                 this.isShowButtonSideBar = !this.isShowButtonSideBar
                 this.$nuxt.$emit("hideSidebar", true)

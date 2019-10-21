@@ -21,7 +21,7 @@ const registrationsSchema = new mongoose.Schema({
     leaderCode: {type: String },
     leaderName: {type: String }, 
     members: { type: Array, default: []},   // [{memberCode:    String, memberName: String}]
-    state: { type: Number, default: 0},
+    state: { type: Number, default: 0}, // 0: start, 1: confirm, 2: no-confirm
   
     created_at:{ type: Number, default: parseInt( new Date().getTime() / 1000 ) },
     updated_at:{ type: Number, default: parseInt( new Date().getTime() / 1000 ) }

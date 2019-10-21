@@ -49,7 +49,6 @@
     import VueLoading from 'vuejs-loading-plugin';
     import passwordValidator from 'password-validator';
     import mixinsResponsive from '~/functions/responsiveGlobal'
-    import HeaderMobile from '~/components/client/headermobile';
     import i18n from '~/lang/i18n.js';
 
     import _ from 'lodash';
@@ -61,7 +60,6 @@
     var md5 = require('md5');
     Vue.use(Toaster, {timeout: 10000});
     export default {
-        components:{ HeaderMobile },
         i18n,
         data() {
             return {

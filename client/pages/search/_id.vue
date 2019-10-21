@@ -112,14 +112,12 @@
 
 	import Vue from "vue"
 	import axios from "axios"
-	import errorContent from '~/components/client/error'
 	import VueTruncate from'vue-truncate-filter'
 	import Method from "~/functions/seenDetailProduct";
 	import i18n from '~/lang/i18n.js';
 	
 	Vue.use(VueTruncate)
 	export default {
-		components:{errorContent},
 		i18n,
 		head(){
 			return { title: "Có " + this.dataSearchPage.length + " Sản phẩm với từ khóa là '" + this.keySearch + "'" + " | BLOOD SHOPPING MALL"  }

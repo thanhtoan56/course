@@ -18,15 +18,26 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 
-// get project by subjectCode
+// get project for teacher by subjectCode
 router.post('/list-project-by-subjectcode', async (req, res) => {
-    const { subjectCode } = req.body;
-    await Projects.find({"subjectCode":subjectCode},{ _id:0, __v:0}).sort({idNumber: -1})
-    .then(result => res.status(200).json({"successes":true,"data":result}))
-    .catch((err) => res.status(200).json({"successes":false,"reason":err}));
+    const { token, subjectCode } = req.body;
+
+    const checkToken = await check.checkToken(token)
+    if(!checkToken.successes) return res.json({"successes":false, reason: checkToken.reason})
+    const checkUser = checkToken.data;
+
+    if(checkUser.decentralise == "a" || checkUser.headOfChemistry == "y" ){
+        await Projects.find({"subjectCode":subjectCode},{ _id:0, __v:0}).sort({idNumber: -1})
+        .then(result => res.status(200).json({"successes":true,"data":result}))
+        .catch((err) => res.status(200).json({"successes":false,"reason":err}));
+    } else {
+        await Projects.find({"subjectCode":subjectCode, "teacherCode": checkUser.code},{ _id:0, __v:0}).sort({idNumber: -1})
+        .then(result => res.status(200).json({"successes":true,"data":result}))
+        .catch((err) => res.status(200).json({"successes":false,"reason":err}));
+    }
 });
 
-// get project isRatify == "Y"  by subjectCode
+// get project for student isRatify == "Y"  by subjectCode
 router.post('/list-project', async (req, res) => {
     const { subjectCode } = req.body;
     await Projects.find({"subjectCode":subjectCode, isRatify: "Y"},{ _id:0, __v:0}).sort({idNumber: -1})
@@ -137,7 +148,7 @@ router.post('/remove-project',async (req,res) =>{
     if(!projectDefine) return res.status(200).json({"successes":false, "reason":"project is not define"});
 
     if(checkUser.code != projectDefine.teacherCode){
-        if(checkUser.decentralise != "a" && checkUser.headOfChemistry != "y") return res.status(200).json({"successes":false,"reason":"You not have access"})
+        if(checkUser.decentralise != "a") return res.status(200).json({"successes":false,"reason":"You not have access"})
     }
     
     await Projects.findOneAndRemove({"idNumber":idNumber}).exec( (err,data) => {
