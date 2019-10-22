@@ -2,6 +2,8 @@ const express = require('express');
 const cron = require('node-cron');
 const router = express.Router();
 const axios = require('axios');
+const xlsx = require('xlsx');
+const fs = require('fs');
 
 const bodyParser = require('body-parser');
 const sha256 = require('sha256');
@@ -33,89 +35,71 @@ var storage = multer.diskStorage({
     destination: (req, file, cb) => { cb(null, 'uploads/files'); },
     
     filename: (async (req, file, cb) => {
-        var filetype = '';
-        // if(file.mimetype === 'image/gif') { filetype = 'gif'; }
-        
-        // if(file.mimetype === 'image/png') { filetype = 'png'; }
-        
-        // if(file.mimetype === 'image/jpeg') { filetype = 'jpg'; }
-        
-        // cb(null, 'file-' + Date.now() + '.' + filetype);
-        cb(null, 'file-' + Date.now() + '.' + 'xlsx');
+        var filetype = file.originalname.split('.')[1];
+        cb(null, 'file-' + Date.now() + '.' + filetype);
     })
 });
 
 var upload =  multer({storage: storage}).array('files', 1);
 
+function clear_Image(excelFiles){
+    for(i = 0; i < excelFiles.length; i++){
+        const path = `./uploads/files/${excelFiles[i].filename}`;
+        fs.unlink(path, (err) => {});
+    }
+}
+
 router.post('/add-many', upload, async (req, res) => {
-    var checkSave = []
-    var token = req.body.token
-    var link = req.body.id_product
-    var images = req.files;
+
+    var excelFiles = req.files;
+    const { token, decentralise, headOfChemistry} = req.body;
+    if(!decentralise || !headOfChemistry) return res.status(200).json({successes: false, reason:"Enter your full information"})
 
     const checkToken = await check.checkToken(token)
-    if(!checkToken.successes){
-        clear_Image(images);
-        return res.json({"successes":false, reason: checkToken.reason})
-    }
-    const user = checkToken.data;
-    var getProduct = await Products.findOne({"link": link});
-    if(images.length > 6) { 
-        clear_Image(images);
-        return res.status(200).json({"successes":false,"reason":"Qua lon"})
-    }
-    for(i = 0; i < images.length; i++){
-        const image = new Images({
-            "filename":images[i].filename,
-            "size":images[i].size,
-            "type": "product",
-            "id_product": getProduct.id_number
-        });
-        await image.save(async (err, data) => {
-            if(data) { checkSave.push(data) }
-        });
-    }
-    if(checkSave !== "") return res.status(200).json({"successes": true});
-    else {  
-        clear_Image(images);
-        return res.status(200).json({"successes": false,"reason":"Err!"});
-    }
+    if(!checkToken.successes) return res.json({"successes":false, reason: checkToken.reason})
+    const checkUser = checkToken.data;
 
+    if(checkUser.decentralise != "a") return res.status(200).json({"successes":false,"reason":"You not have access"})
     
-    // var index = 0;
-    // const result = await indexS.findOne({'nameCollection': name_collection});
-    // if(result == null){ tool_insert_index_collection.insert_index_collection(name_collection, 1); index = 1; }
-    // else { index = result.index; }
-    
-    // const {token, fullName, code, decentralise, headOfChemistry } = req.body;
-    
-    // if(!fullName || !code || !decentralise) return res.status(200).json({successes: false, reason:"Enter your full information"})
-    
-    // const checkToken = await check.checkToken(token)
-    // if(!checkToken.successes) return res.json({"successes":false, reason: checkToken.reason})
-    // const checkUser = checkToken.data;
+    const path = `./uploads/files/${excelFiles[0].filename}`;
+    var wb = xlsx.readFile(path, {cellDates: true})
 
-    // if(checkUser.decentralise != "a") return res.status(200).json({"successes":false,"reason":"You not have access"})
+    for(i = 0; i < wb.SheetNames.length; i++){
+        var ws = wb.Sheets[wb.SheetNames[i]]
+        var data = xlsx.utils.sheet_to_json(ws)
 
-    // // var datatUserDetailByCode = await getUserDetailByCode(code)
-    // // if(datatUserDetailByCode != "" || datatUserDetailByCode != undefined || datatUserDetailByCode != null) return res.status(200).json({successes:false, "reason":"Code is used"})
+        for(j = 0; j < data.length; j++){
 
-    // const user = new Users({
-    //     "idNumber": index,
-    //     "fullName": fullName,
-    //     "code": code,
-    //     "userName": code,
-    //     "email": decentralise == "s" ? `${code}@student.tdtu.edu.vn` : `${code}@it.tdt.edu.vn`,
-    //     "passWord": sha256(md5(code)),
-    //     "decentralise": decentralise,
-    //     "headOfChemistry": headOfChemistry,
-    // });
-    // await user.save(async (err, data) =>{
-    //     if(err || !data) return res.status(200).json({successes: false, reason: "Error." })
-        
-    //     await tool_insert_index_collection.update_index_collection(name_collection, index);
-    //     return res.status(200).json({successes:true, data})
-    // }); 
+            var index = 0;
+            const result = await indexS.findOne({'nameCollection': name_collection});
+            if(result == null){ tool_insert_index_collection.insert_index_collection(name_collection, 1); index = 1; }
+            else { index = result.index; }
+
+            var md5Done = md5(String(data[j].MSSV))
+            // console.log(md5Done)
+            var sha256Done = sha256(md5Done)
+            // console.log(sha256Done)
+            var user = new Users({
+                "idNumber": index,
+                "fullName": data[j].FullName,
+                "code": data[j].MSSV,
+                "userName": data[j].MSSV,
+                "email": decentralise == "s" ? `${data[j].MSSV}@student.tdtu.edu.vn` : `${data[j].MSSV}@it.tdt.edu.vn`,
+                "passWord": sha256Done,
+                "decentralise": decentralise,
+                "headOfChemistry": headOfChemistry,
+            });
+            await user.save(async (err, data) =>{
+                if(err || !data) {
+                    clear_Image(excelFiles);
+                    return res.status(200).json({successes: false, reason: `Error in ${wb.SheetNames[i]} - item ${j}` })
+                }
+            });
+            await tool_insert_index_collection.update_index_collection(name_collection, index);
+        }
+    }
+    clear_Image(excelFiles);
+    return res.status(200).json({successes:true})
 });
 
 cron.schedule('* * * * * *', async () => {
@@ -217,14 +201,15 @@ router.post('/add', async (req, res) => {
 
     // var datatUserDetailByCode = await getUserDetailByCode(code)
     // if(datatUserDetailByCode != "" || datatUserDetailByCode != undefined || datatUserDetailByCode != null) return res.status(200).json({successes:false, "reason":"Code is used"})
-
+    var md5Done = md5(code)
+    var sha256Done = sha256(md5Done)
     const user = new Users({
         "idNumber": index,
         "fullName": fullName,
         "code": code,
         "userName": code,
         "email": decentralise == "s" ? `${code}@student.tdtu.edu.vn` : `${code}@it.tdt.edu.vn`,
-        "passWord": sha256(md5(code)),
+        "passWord": sha256Done,
         "decentralise": decentralise,
         "headOfChemistry": headOfChemistry,
     });

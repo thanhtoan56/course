@@ -1,5 +1,6 @@
 <template >
     <div>
+        <notifications group="auth" style="margin-top:62px" />
         <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
             <li class="nav-item" @click="filterUser('s')">
                 <a role="tab" class="nav-link show" id="tab-0" data-toggle="tab" href="#tab-content-0" aria-selected="false">
@@ -19,8 +20,6 @@
         </ul>
 
         <div class="main-card mb-3 card" v-if="isShowForm">
-
-            <notifications group="auth" style="margin-top:62px" />
             <div class="card-body" v-if="!isFormFile">
                 <h5 class="card-title">Thêm mới</h5>
                 <div class="position-relative row form-group">
@@ -81,9 +80,9 @@
                 </div>
 
                 <div class="position-relative row form-group">
-                    <label class="col-sm-3 col-form-label">Mã sinh viên / Giảng viên</label>
+                    <label class="col-sm-3 col-form-label">File</label>
                     <div class="col-sm-9">
-                        <input type="file" id="fileMain" placeholder="Nhập mã" class="form-control">
+                        <input type="file" id="fileMain" class="form-control">
                     </div>
                 </div>
                 <div class="position-relative row form-check">
@@ -156,9 +155,7 @@
         <modal name="Modal_FormUpdateUser" style="margin-top: 60px;" width="400px" height="auto" :scrollable="true">
             <div class="image_logo">
                 <div class="card card-small mb-4" style="margin-bottom: 0!important">
-                    
                     <div class="main-card card" >
-                        <notifications group="auth" style="margin-top:62px" />
                         <div class="card-body">
                             <h5 class="card-title">Update user</h5>
                             <div class="form-row">
@@ -198,7 +195,6 @@
         </modal>
         
         <modal class="delete" name="FormDeleteUser" style="margin-top: 60px;" width="400px" height="auto" :scrollable="true">
-            <notifications group="auth" style="margin-top:62px" />
             <div class="card card-small form-delete-user">
                 <div class="card-header border-bottom">
                     <h6 class="m-0">Xác nhận</h6>
@@ -269,18 +265,27 @@
         },
         methods:{
             addUserByFile(){
-                var formData = new FormData();
-                var imagefile = document.querySelector('#fileMain');
+                console.log(this.decentralise)
+                console.log(this.headOfChemistry)
 
-                formData.append("image_main", imagefile.files[0]);
-                formData.append("brand",brand)
-                formData.append("tags",tags)
-                formData.append("description",description)
-                formData.append("token",localStorage.token || null)
+                var formData = new FormData();
+                var excelfile = document.querySelector('#fileMain');
+
+                formData.append("files", excelfile.files[0]);
+                formData.append("decentralise", this.decentralise)
+                formData.append("headOfChemistry", this.headOfChemistry)
+                formData.append("token", localStorage.token || null)
 
                 axios.post(`${this.$store.state.apiLink}/user/add-many`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-                .then( data => {
-                    
+                .then( res => {
+                    if (res.data.successes){
+                        this.$notify({ group: 'auth', title: 'Confirm', text: 'Add is success', type: 'success'});
+                        this.emptyForm()
+                        this.cancelAddUserByFile(); 
+                        this.getAllUser()
+                    } else {
+                        this.$notify({group: 'auth',title: 'Notice', text: res.data.reason || "Error",type: 'warn'})
+                    }
                 })
                 .catch(err => { })
             },
