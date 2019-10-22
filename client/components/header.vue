@@ -1,7 +1,11 @@
 <template>
     <div class="app-header header-shadow">
         <div class="app-header__logo">
-            <div class="logo-src"></div>
+            <!-- <div class="logo-src"> -->
+            <!-- <div>
+                <img src="/assets/images/logo-tdt-120_0.png" alt="" style="max-width: 60%">
+            </div> -->
+            <img src="/assets/images/logo-tdt-120_0.png" alt="" style="max-width: 40%">
             <div class="header__pane ml-auto">
                 <div id="btnShowSideBar">
                     <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
@@ -156,7 +160,11 @@
             
         },
         
-        mounted(){  },
+        mounted(){ 
+            this.$nuxt.$on("closeSidebarMobile", data => {
+                this.hideSidebarMobile()
+            })
+        },
         
         watch: { },
         

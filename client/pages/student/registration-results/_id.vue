@@ -12,13 +12,13 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="main-card mb-3 card">
-                    <div class="card-header">Active Users
-                        <div class="btn-actions-pane-right">
+                    <div class="card-header">Kết quả đăng ký 
+                        <!-- <div class="btn-actions-pane-right">
                             <div role="group" class="btn-group-sm btn-group">
                                 <button class="active btn btn-focus">Last Week</button>
                                 <button class="btn btn-focus">All Month</button>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="table-responsive">
                         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-        <modal name="FormDetailProject" width="auto" height="auto" :scrollable="true">
+        <modal name="FormDetailProject" height="auto" :scrollable="true">
             <div class="modal" style="display: block; padding-left: 0px; top:60px;">
                 <div class="modal-dialog modal-lg" style="height: 85%">
                     <div class="modal-content" style="height: 100%;">

@@ -19,8 +19,9 @@
         </ul>
 
         <div class="main-card mb-3 card" v-if="isShowForm">
+
             <notifications group="auth" style="margin-top:62px" />
-            <div class="card-body">
+            <div class="card-body" v-if="!isFormFile">
                 <h5 class="card-title">Thêm mới</h5>
                 <div class="position-relative row form-group">
                     <label class="col-sm-3 col-form-label">Mã sinh viên / Giảng viên</label>
@@ -58,6 +59,40 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="card-body" v-if="!isFormFile">
+                <div class="position-relative row form-check">
+                    <button class="btn btn-success" @click="showFormFile()">Thêm User bằng file</button>
+                </div>
+            </div>
+
+            <div class="card-body" v-if="isFormFile">
+                <h5 class="card-title">Thêm bằng file</h5>
+                <div class="position-relative row form-group">
+                    <label for="exampleSelect" class="col-sm-3 col-form-label">Vai trò</label>
+                    <div class="col-sm-9">
+                        <select id="exampleSelect" class="form-control" @change="onChang()">
+                            <option value="">Vai trò</option>
+                            <option value="teacher">Giảng viên</option>
+                            <option value="student">Sinh viên</option>
+                            <option value="header">Trưởng bộ môn</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="position-relative row form-group">
+                    <label class="col-sm-3 col-form-label">Mã sinh viên / Giảng viên</label>
+                    <div class="col-sm-9">
+                        <input type="file" id="fileMain" placeholder="Nhập mã" class="form-control">
+                    </div>
+                </div>
+                <div class="position-relative row form-check">
+                    <div style="text-align: center;">
+                        <button class="btn btn-secondary" @click="cancelAddUserByFile()">Cancel</button>
+                        <button class="btn btn-success" @click="addUserByFile()">Submit</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row">
@@ -78,7 +113,6 @@
                                     <th class="text-center">STT</th>
                                     <th class="text-center">Mã số</th>
                                     <th class="text-center">Họ tên</th>
-                                    <!-- <th class="text-center">Status</th> -->
                                     <th class="text-center">Chỉnh sửa</th>
                                 </tr>
                             </thead>
@@ -90,11 +124,6 @@
                                     <td class="text-center">
                                         <div class="widget-content p-0">
                                             <div class="widget-content-wrapper">
-                                                <!-- <div class="widget-content-left mr-3">
-                                                    <div class="widget-content-left">
-                                                        <img width="40" class="rounded-circle" src="assets/images/avatars/4.jpg" alt="">
-                                                    </div>
-                                                </div> -->
                                                 <div class="widget-content-left flex2">
                                                     <div class="widget-heading">{{item.fullName}}</div>
                                                     <div class="widget-subheading opacity-7">Web Developer</div>
@@ -102,9 +131,6 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <!-- <td class="text-center">
-                                        <div class="badge badge-warning">Pending</div>
-                                    </td> -->
                                     <td class="text-center">
                                         <button type="button" id="PopoverCustomT-1" class="btn btn-success btn-sm" @click="showFormUpdateUser(item)">
                                             <i class="pe-7s-pen"></i>
@@ -230,7 +256,9 @@
                     {id: "t", name: "Giảng viên"},
                     {id: "h", name: "Trưởng bộ môn"},
                     {id: "a", name: "Admin"},
-                ]
+                ],
+
+                isFormFile: false
         	}
         },
         created(){
@@ -240,7 +268,29 @@
 			
         },
         methods:{
+            addUserByFile(){
+                var formData = new FormData();
+                var imagefile = document.querySelector('#fileMain');
 
+                formData.append("image_main", imagefile.files[0]);
+                formData.append("brand",brand)
+                formData.append("tags",tags)
+                formData.append("description",description)
+                formData.append("token",localStorage.token || null)
+
+                axios.post(`${this.$store.state.apiLink}/user/add-many`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+                .then( data => {
+                    
+                })
+                .catch(err => { })
+            },
+            cancelAddUserByFile(){
+                this.isFormFile = false
+                this.isShowForm = false
+            },
+            showFormFile(){
+                this.isFormFile = !this.isFormFile
+            },
             deleteUser(idNumber) {
                 axios.post(`${this.$store.state.apiLink}/user/delete`, { "token": localStorage.token || "", "idNumber": idNumber, })
                 .then(res => {
@@ -380,7 +430,6 @@
                     this.headOfChemistry = "n"
                     this.decentralise = "s"
                 }
-                
             },
 
             addUser() {

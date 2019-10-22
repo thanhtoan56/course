@@ -8,16 +8,17 @@
                     <div class="app-page-title">
                         <div class="page-title-wrapper">
                             <div class="page-title-heading">
-                                <div class="page-title-icon">
-                                    <i class="pe-7s-car icon-gradient bg-mean-fruit">
-                                    </i>
+                                <div class="page-title-icon" style="padding: 0.6rem; width: 75px; height: 75px;">
+                                    <!-- <i class="pe-7s-car icon-gradient bg-mean-fruit"></i> -->
+                                    <img src="/assets/images/cntt.png" alt="" style="max-width: 100%;">
                                 </div>
-                                <div>Analytics Dashboard
-                                    <div class="page-title-subheading">This is an example dashboard created using build-in elements and components.
-                                    </div>
+                                <div>
+                                    <span style="font-weight: 600; color: #ed1c24;">TRANG ĐĂNG KÝ ĐỀ TÀI ĐỒ ÁN - LUẬN VĂN KHOA CNTT</span>
+                                    <div class="page-title-subheading">Trường ĐH Tôn Đức Thắng</div>
+                                    <div class="page-title-subheading">Khoa Công Nghệ Thông Tin</div>
                                 </div>
                             </div>
-                            <div class="page-title-actions">
+                            <!-- <div class="page-title-actions">
                                 <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom" class="btn-shadow mr-3 btn btn-dark">
                                     <i class="fa fa-star"></i>
                                 </button>
@@ -67,7 +68,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                            </div>    
+                            </div>     -->
                         </div>
                     </div>
                     <nuxt />
@@ -93,6 +94,7 @@ export default {
             $("#sidebar").addClass('closed-sidebar')
             this.$forceUpdate();
         })
+
         this.$nuxt.$on("showSidebar", data => {
             $("#sidebar").removeClass('closed-sidebar')
             this.$forceUpdate();
@@ -102,6 +104,7 @@ export default {
             $("#sidebar").removeClass('sidebar-mobile-open')
             this.$forceUpdate();
         })
+        
         this.$nuxt.$on("showSidebarMobile", data => {
             $("#sidebar").addClass('sidebar-mobile-open')
             this.$forceUpdate();

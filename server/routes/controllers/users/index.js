@@ -27,6 +27,97 @@ router.use(express.json());
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
+var multer  = require('multer');
+
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => { cb(null, 'uploads/files'); },
+    
+    filename: (async (req, file, cb) => {
+        var filetype = '';
+        // if(file.mimetype === 'image/gif') { filetype = 'gif'; }
+        
+        // if(file.mimetype === 'image/png') { filetype = 'png'; }
+        
+        // if(file.mimetype === 'image/jpeg') { filetype = 'jpg'; }
+        
+        // cb(null, 'file-' + Date.now() + '.' + filetype);
+        cb(null, 'file-' + Date.now() + '.' + 'xlsx');
+    })
+});
+
+var upload =  multer({storage: storage}).array('files', 1);
+
+router.post('/add-many', upload, async (req, res) => {
+    var checkSave = []
+    var token = req.body.token
+    var link = req.body.id_product
+    var images = req.files;
+
+    const checkToken = await check.checkToken(token)
+    if(!checkToken.successes){
+        clear_Image(images);
+        return res.json({"successes":false, reason: checkToken.reason})
+    }
+    const user = checkToken.data;
+    var getProduct = await Products.findOne({"link": link});
+    if(images.length > 6) { 
+        clear_Image(images);
+        return res.status(200).json({"successes":false,"reason":"Qua lon"})
+    }
+    for(i = 0; i < images.length; i++){
+        const image = new Images({
+            "filename":images[i].filename,
+            "size":images[i].size,
+            "type": "product",
+            "id_product": getProduct.id_number
+        });
+        await image.save(async (err, data) => {
+            if(data) { checkSave.push(data) }
+        });
+    }
+    if(checkSave !== "") return res.status(200).json({"successes": true});
+    else {  
+        clear_Image(images);
+        return res.status(200).json({"successes": false,"reason":"Err!"});
+    }
+
+    
+    // var index = 0;
+    // const result = await indexS.findOne({'nameCollection': name_collection});
+    // if(result == null){ tool_insert_index_collection.insert_index_collection(name_collection, 1); index = 1; }
+    // else { index = result.index; }
+    
+    // const {token, fullName, code, decentralise, headOfChemistry } = req.body;
+    
+    // if(!fullName || !code || !decentralise) return res.status(200).json({successes: false, reason:"Enter your full information"})
+    
+    // const checkToken = await check.checkToken(token)
+    // if(!checkToken.successes) return res.json({"successes":false, reason: checkToken.reason})
+    // const checkUser = checkToken.data;
+
+    // if(checkUser.decentralise != "a") return res.status(200).json({"successes":false,"reason":"You not have access"})
+
+    // // var datatUserDetailByCode = await getUserDetailByCode(code)
+    // // if(datatUserDetailByCode != "" || datatUserDetailByCode != undefined || datatUserDetailByCode != null) return res.status(200).json({successes:false, "reason":"Code is used"})
+
+    // const user = new Users({
+    //     "idNumber": index,
+    //     "fullName": fullName,
+    //     "code": code,
+    //     "userName": code,
+    //     "email": decentralise == "s" ? `${code}@student.tdtu.edu.vn` : `${code}@it.tdt.edu.vn`,
+    //     "passWord": sha256(md5(code)),
+    //     "decentralise": decentralise,
+    //     "headOfChemistry": headOfChemistry,
+    // });
+    // await user.save(async (err, data) =>{
+    //     if(err || !data) return res.status(200).json({successes: false, reason: "Error." })
+        
+    //     await tool_insert_index_collection.update_index_collection(name_collection, index);
+    //     return res.status(200).json({successes:true, data})
+    // }); 
+});
+
 cron.schedule('* * * * * *', async () => {
     await Tokens.find({"created_at":{$lt:parseInt(new Date()/1000 - 10800)}}).exec(async (err, data) => {
         if(data != ""){

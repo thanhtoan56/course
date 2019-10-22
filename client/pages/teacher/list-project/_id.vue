@@ -117,7 +117,7 @@
             </div>
         </div>
         
-        <modal name="FormDetailProject" width="auto" height="auto" :scrollable="true">
+        <modal name="FormDetailProject" height="auto" :scrollable="true">
             <div class="modal" style="display: block; padding-left: 0px; top:60px;">
                 <div class="modal-dialog modal-lg" style="height: 85%">
                     <div class="modal-content" style="height: 100%;">
@@ -153,7 +153,7 @@
             </div>
         </modal>
 
-        <modal name="FormUpdateProject" width="auto" height="auto" :scrollable="true">
+        <modal name="FormUpdateProject" height="auto" :scrollable="true">
             <div class="modal" style="display: block; padding-left: 0px; top:60px;">
                 <div class="modal-dialog modal-lg" style="height: 85%;">
                     <div class="modal-content" style="height: 100%;">
@@ -206,7 +206,7 @@
             
         </modal>
 
-        <modal name="FormDeleteProject" width="auto" height="auto" :scrollable="true">
+        <modal name="FormDeleteProject" height="auto" :scrollable="true">
             <div class="modal" style="display: block; padding-left: 0px; top:60px;">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">

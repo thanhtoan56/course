@@ -1,8 +1,8 @@
 {
-  "name": "bloodmall",
+  "name": "cntt",
   "version": "1.0.0",
   "description": "My terrific Nuxt.js project",
-  "author": "minh",
+  "author": "nguyen thanh toan",
   "private": true,
   "scripts": {
     "dev": "cross-env NUXT_HOST=0.0.0.0 NUXT_PORT=3000 nuxt",

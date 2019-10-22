@@ -8,7 +8,7 @@ module.exports ={
   */
   head: {
     // title: pkg.name,
-    title: 'Course',
+    title: 'Khoa CNTT',
     meta: 
     [
       { charset: 'utf-8' },

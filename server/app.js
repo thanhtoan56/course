@@ -70,6 +70,10 @@ require('./config/passport')(passport)
 //     res.sendFile(__dirname + `/uploads/contents/${image}`);
 // });
 
+app.get("/download/registrations.xlsx", (req, res) => {
+    res.sendFile(__dirname + `/download/registrations.xlsx`);
+});
+
 app.get("/:id", function(req, res) {
 	var image = req.params.id;
     res.sendFile(__dirname + `/uploads/avatars/${image}`);

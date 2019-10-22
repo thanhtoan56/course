@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
+const fs = require('fs');
+const nodeXlsx = require('node-xlsx');
 
 const name_collection = "registrations";
 
@@ -169,4 +171,43 @@ router.post('/cancel-registration',async (req,res) =>{
     });
 });
 
+// Khi client truy cập router này thì server sẽ export ngay file excel xuống client
+router.post('/export-download',async (req, res) => {
+    let dataExcel = [];
+
+    const { token, subjectCode, idNumberProjectType } = req.body;
+
+    const checkToken = await check.checkToken(token)
+    if(!checkToken.successes) return res.json({"successes":false, reason: checkToken.reason})
+    const checkUser = checkToken.data;
+    
+    if(checkUser.decentralise != "a" && checkUser.decentralise != "t") return res.status(200).json({"successes":false,"reason":"You not have access"})
+
+    await Registrations.updateMany({"subjectCode": subjectCode, "idNumberProjectType": idNumberProjectType, "state": 0}, {"state": 1})
+    var registrations = await Registrations.find({"subjectCode": subjectCode, "idNumberProjectType": idNumberProjectType, "state": 1}, 
+    {_id:0, __v:0, state:0, created_at:0, updated_at:0, idNumberProjectType:0, teacherCode:0, projectTarget:0, projectRequire:0, idNumber:0, members:0})
+    
+    // Lay du lieu header cho file excel <=> lay cac key name trong collection
+    // O day cac key name cua collection user la: userName, email, phone
+    let arrHeaderTitle = [];
+    Object.keys(registrations[0]['_doc']).forEach(key => {
+        arrHeaderTitle.push(key);
+    });
+    dataExcel.push(arrHeaderTitle);  // push header vao mang dataExcel
+
+    // Lay du lieu cac row tuong ung voi header <=> lay cac value tuong ung voi key name o tren
+    for (let item of registrations) {
+        let rowItemValue = [];
+        Object.keys(item._doc).forEach(key => {
+            rowItemValue.push(item[key]);
+        });
+        dataExcel.push(rowItemValue); // push tung dong value vao mang dataExcel
+    }
+    let buffer = nodeXlsx.build([{name: "List User", data: dataExcel}]); // Returns a buffer
+    fs.writeFile('download/registrations.xlsx', buffer, function (err) {
+        if (err) return console.log(err);
+        else return res.status(200).json({"successes":true, data: "download/registrations.xlsx"})
+    });
+  });
+  
 module.exports = router

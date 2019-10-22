@@ -34,9 +34,10 @@
         <div class="scrollbar-sidebar ps ps--active-y">
             <div class="app-sidebar__inner">
                 <ul class="vertical-nav-menu metismenu">
-                    <li class="app-sidebar__heading">Dashboards</li>
-                    <li>
-                        <nuxt-link to="/" class="mm-active">
+                    <!-- <li class="app-sidebar__heading">Dashboards</li> -->
+                    <li class="app-sidebar__heading"></li>
+                    <li @click="goToPage('/', '')">
+                        <nuxt-link to="">
                             <i class="metismenu-icon pe-7s-study"></i>
                             Trang chủ
                         </nuxt-link>
@@ -45,52 +46,52 @@
                     <!-- Admin -->
                     <template v-if="checkSidebar()">
                         <li class="app-sidebar__heading">Admin</li>
-                        <li>
-                            <nuxt-link to="/admin/users">
+                        <li @click="goToPage('/admin/users', '')">
+                            <nuxt-link to="">
                                 <i class="metismenu-icon pe-7s-user"></i>
                                 User
                                 <i class="metismenu-state-icon caret-left"></i>
                             </nuxt-link>
                         </li>
-                        <li>
-                            <nuxt-link to="/admin/subjects">
+                        <li @click="goToPage('/admin/subjects', '')">
+                            <nuxt-link to="">
                                 <i class="metismenu-icon pe-7s-bookmarks"></i>
                                 Môn học
                                 <i class="metismenu-state-icon caret-left"></i>
                             </nuxt-link>
                         </li>
-                        <li>
-                            <nuxt-link to="#">
+                        <!-- <li>
+                            <nuxt-link to="">
                                 <i class="metismenu-icon pe-7s-notebook"></i>
                                 Đề tài
                             </nuxt-link>
-                        </li>
+                        </li> -->
                     </template>
                     
                     <!-- Giảng viên -->
                     <template v-if="userInfo.decentralise != 's'">
-                        <li class="app-sidebar__heading">Danh sách môn học</li>
+                        <li class="app-sidebar__heading">Quản lý môn học</li>
                         <li v-for="(item, index) in dataSubject" :key="index" @click="showSubmenu(index)" :id="`liCollapse${index}`">
                             <nuxt-link :to="''">
-                                <i class="metismenu-icon pe-7s-diamond"></i>
+                                <i class="metismenu-icon pe-7s-notebook"></i>
                                     {{item.subjectName}}
                                 <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                             </nuxt-link>
                             <ul class="mm-collapse" :id="`collapse${index}`">
-                                <li>
-                                    <nuxt-link :to="`/teacher/list-project/${item.subjectCode}`">
+                                <li @click="goToPage('/teacher/list-project/', item.subjectCode)">
+                                    <nuxt-link to="">
                                         <i class="metismenu-icon"></i>
                                         Danh sách đề tài
                                     </nuxt-link>
                                 </li>
-                                <li>
-                                    <nuxt-link :to="`/teacher/list-type-project/${item.subjectCode}`">
+                                <li @click="goToPage('/teacher/list-type-project/', item.subjectCode)">
+                                    <nuxt-link to="">
                                         <i class="metismenu-icon"></i>
                                         Danh sách loại đề tài
                                     </nuxt-link>
                                 </li>
-                                <li>
-                                    <nuxt-link :to="`/teacher/registration-results/${item.subjectCode}`">
+                                <li @click="goToPage('/teacher/registration-results/', item.subjectCode)">
+                                    <nuxt-link to="">
                                         <i class="metismenu-icon"></i>
                                         Kết quả đăng ký
                                     </nuxt-link>
@@ -103,20 +104,20 @@
                     <template v-if="userInfo.decentralise != 't'">
                         <li class="app-sidebar__heading">Danh sách môn học</li>
                         <li v-for="(item, i) in dataSubject" :key="i+dataSubject.length+1" @click="showSubmenu(i+dataSubject.length+1)" :id="`liCollapse${i+dataSubject.length+1}`">
-                            <nuxt-link :to="''">
+                            <nuxt-link to="">
                                 <i class="metismenu-icon pe-7s-diamond"></i>
                                     {{item.subjectName}}
                                 <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                             </nuxt-link>
                             <ul class="mm-collapse " :id="`collapse${i+dataSubject.length+1}`">
-                                <li>
-                                    <nuxt-link :to="`/student/list-project/${item.subjectCode}`">
+                                <li @click="goToPage('/student/list-project/', item.subjectCode)">
+                                    <nuxt-link to="">
                                         <i class="metismenu-icon"></i>
                                         Danh sách đề tài
                                     </nuxt-link>
                                 </li>
-                                <li>
-                                    <nuxt-link :to="`/student/registration-results/${item.subjectCode}`">
+                                <li @click="goToPage('/student/registration-results/', item.subjectCode)">
+                                    <nuxt-link to="">
                                         <i class="metismenu-icon"></i>
                                         Kết quả đăng ký
                                     </nuxt-link>
@@ -172,6 +173,11 @@
         },
 
         methods: {
+            goToPage(link, param){
+                this.$nuxt.$emit("closeSidebarMobile", true)
+                this.$router.push({path: `${link}${param}`})
+            },
+
             checkSidebar() {
                 if(this.$store.state.userInfo && this.$store.state.userInfo != ""){
                     if(this.$store.state.userInfo.data && this.$store.state.userInfo.data != ""){

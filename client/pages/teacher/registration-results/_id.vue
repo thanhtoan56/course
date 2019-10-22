@@ -57,14 +57,14 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- <div class="d-block text-center card-footer">
-                        <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i class="pe-7s-trash btn-icon-wrapper"> </i></button>
-                        <button class="btn-wide btn btn-success">Save</button>
-                    </div> -->
+                    <div class="d-block text-center card-footer">
+                        <!-- <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i class="pe-7s-trash btn-icon-wrapper"> </i></button> -->
+                        <button class="btn-wide btn btn-success" @click="showFormPrint()">In kết quả</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <modal name="FormDetailProject" width="auto" height="auto" :scrollable="true">
+        <modal name="FormDetailProject" height="auto" :scrollable="true">
             <div class="modal" style="display: block; padding-left: 0px; top:60px;">
                 <div class="modal-dialog modal-lg" style="height: 85%">
                     <div class="modal-content" style="height: 100%;">
@@ -122,6 +122,40 @@
                 </div>
             </div>
         </modal>
+
+        <modal name="FormPrintResult" height="auto" :scrollable="true">
+            <div class="modal" style="display: block; padding-left: 0px; top:60px;">
+                <div class="modal-dialog modal-lg" style="width: 300px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Chi tiết</h5>
+                            <button class="close" @click="hideFormPrint()"> <span>×</span> </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="position-relative row form-group">
+                                <label class="col-sm-3 col-form-label">Loại</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" @change="onChang()">
+                                        <option :value="0" selected>Chọn loại đề tài</option>
+                                        <option v-for="(item, index) in listType" 
+                                            :key="index" 
+                                            :value="item.idNumber" 
+                                            :data-foo="item.projectTypeName"
+                                        >
+                                            {{item.projectTypeName}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" @click="hideFormPrint()">Hủy</button>
+                            <button type="button" class="btn btn-primary" @click="exportDownload()">Export và download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </modal>
     </div>
 </template>
 <script>
@@ -174,6 +208,53 @@
         },
 
         methods:{
+            hideFormPrint(){
+                this.emptyForm()
+                this.$modal.hide("FormPrintResult")
+            },
+
+            showFormPrint(){
+                this.$modal.show("FormPrintResult")
+            },
+
+            onChang(){
+                this.idNumberProjectType = Number(event.target.value)
+                this.projectTypeName = event.target.options[event.target.options.selectedIndex].dataset.foo
+            },
+            
+            exportDownload(){
+                if(this.idNumberProjectType == 0) return this.$notify({group: 'auth', title: 'Notice', text: 'Vui lòng chọn loại đề tài',type: 'warn'});
+                else {
+                axios.post(`${this.$store.state.apiLink}/registration/export-download`, {
+                        "subjectCode": this.$route.params.id,
+                        "idNumberProjectType": this.idNumberProjectType, 
+                        "token": localStorage.token || ""
+                    })
+                    .then(res => {
+                        var link = res.data.data
+                        axios({
+                            url: `${this.$store.state.apiApp}${link}`,
+                            method: 'GET',
+                            responseType: 'blob',
+                        }).then(response => {
+                            var nameFile = response.config.url.split("/")[response.config.url.split("/").length - 1]
+                            var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                            var fileLink = document.createElement('a');
+                            fileLink.href = fileURL;
+                            fileLink.setAttribute('download', nameFile);
+                            document.body.appendChild(fileLink);
+                            fileLink.click();
+
+                            this.hideFormPrint()
+                            this.emptyForm()
+                            this.getAllProjectType()
+                            this.getAllProject()
+                        });
+                        
+                    })
+                }
+            },
+
             cancelProject(project){
                 if(project.state > 0) return this.$notify({group: 'auth', title: 'Notice', text: 'You have either confirmed or canceled',type: 'warn'});
                 else {
