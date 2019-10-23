@@ -60,12 +60,6 @@
                                 <i class="metismenu-state-icon caret-left"></i>
                             </nuxt-link>
                         </li>
-                        <!-- <li>
-                            <nuxt-link to="">
-                                <i class="metismenu-icon pe-7s-notebook"></i>
-                                Đề tài
-                            </nuxt-link>
-                        </li> -->
                     </template>
                     
                     <!-- Giảng viên -->
@@ -101,7 +95,7 @@
                     </template>
 
                     <!-- Sinh viên -->
-                    <template v-if="userInfo.decentralise != 't'">
+                    <template v-if="userInfo.decentralise == 's'">
                         <li class="app-sidebar__heading">Danh sách môn học</li>
                         <li v-for="(item, i) in dataSubject" :key="i+dataSubject.length+1" @click="showSubmenu(i+dataSubject.length+1)" :id="`liCollapse${i+dataSubject.length+1}`">
                             <nuxt-link to="">
@@ -173,6 +167,7 @@
         },
 
         methods: {
+
             goToPage(link, param){
                 this.$nuxt.$emit("closeSidebarMobile", true)
                 this.$router.push({path: `${link}${param}`})
@@ -182,8 +177,7 @@
                 if(this.$store.state.userInfo && this.$store.state.userInfo != ""){
                     if(this.$store.state.userInfo.data && this.$store.state.userInfo.data != ""){
                         this.userInfo = this.$store.state.userInfo.data
-                        if(this.userInfo.decentralise == "a")
-                        return true
+                        if(this.userInfo.decentralise == "a") return true
                     } else return false
                 } else return false 
             },
@@ -197,6 +191,7 @@
                 })
                 .catch(err => err);
             },
+
             showSubmenu(id){
                 $("#collapse"+id).toggleClass("mm-show")
                 $("#liCollapse"+id).toggleClass("mm-active")

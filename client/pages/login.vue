@@ -10,7 +10,7 @@
                             <div class="modal-content" style="margin: 0 auto; width: 290px">
                                 <div class="modal-body">
                                     <div class="h5 modal-title text-center">
-                                        <h4 class="mt-2" style="margin-bottom: 1.5rem"> LOGIN </h4>
+                                        <h4 class="mt-2" style="margin-bottom: 1.5rem"> LOGIN FORM</h4>
                                     </div>
                                     <div class="form-row">
                                         <div class="col-md-12">
@@ -23,20 +23,23 @@
                                                 <input class="form-control" type="password" placeholder="Password ..." v-on:keyup.enter="userLogin" required v-model="password">
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
-                                            <h6 class="mb-0"><a href="javascript:void(0);" class="text-primary">Forgot Password ?</a></h6>
-                                        </div>
+                                        <!-- <div class="col-md-12">
+                                            <h6 class="mb-0"><a href="javascript:void(0);" class="text-primary">Quên mật khẩu ?</a></h6>
+                                        </div> -->
                                     </div>
                                 </div>
                                 <div class="modal-footer clearfix">
-                                        <button class="btn btn-primary btn-lg" style="font-size: 15px; width: 100%;" @click="userLogin" :disabled="!checkInput"
+                                        <button 
+                                            class="btn btn-primary btn-lg" 
+                                            style="font-size: 15px; width: 100%;" 
+                                            @click="userLogin" :disabled="!checkInput"
                                         >
-                                            Login to Registration
+                                            Login
                                         </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="text-center text-white opacity-8 mt-3">Copyright © ThanhToan 2019</div>
+                        <div class="text-center text-white opacity-8 mt-3">Copyright © NguyenThanhToan 2019</div>
                     </div>
                 </div>
             </div>

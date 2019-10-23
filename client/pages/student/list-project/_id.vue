@@ -225,9 +225,19 @@
         created() {
             this.getAllProjectType()
             this.getAllProject()
+            this.checkUserPermission()
         },
 
         methods:{
+            
+            checkUserPermission(){
+                if(this.$store.state.userInfo && this.$store.state.userInfo != ""){
+                    if(this.$store.state.userInfo.data && this.$store.state.userInfo.data != ""){
+                        if(this.$store.state.userInfo.data.decentralise == "t") return this.$router.back()
+                    } else return false
+                } else return false
+            },
+
             deleteProject(idNumber){
                 axios.post(`${this.$store.state.apiLink}/project/remove-project`, {
                     "idNumber": idNumber,
@@ -395,8 +405,6 @@
                     })
                 }
             },
-
-            
             
             onChang(){
                 this.idNumberProjectType = Number(event.target.value)
@@ -426,7 +434,6 @@
             },
 
             getAllProject() {
-                // axios.post(`${this.$store.state.apiLink}/project/list-project-by-subjectcode`,{
                 axios.post(`${this.$store.state.apiLink}/project/list-project`,{
                     "subjectCode": this.$route.params.id,
                 })

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12">
                 <div class="main-card mb-3 card">
                     <div class="card-header">Danh sách môn học
@@ -146,25 +146,22 @@
                         </table>
                     </div>
                     <div class="d-block text-center card-footer">
-                        <!-- <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i class="pe-7s-trash btn-icon-wrapper"> </i></button> -->
-                        <!-- <button class="btn-wide btn btn-primary"></button> -->
+                        <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i class="pe-7s-trash btn-icon-wrapper"> </i></button>
+                        <button class="btn-wide btn btn-primary"></button>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
     export default {
-        mounted(){
-            if ( !this.$store.state.userInfo.successes) { this.$router.push({path:'/login'})  } 
-            else {
-                if(this.$store.state.userInfo.data.decentralise === "t") { this.$router.push({path:'/login'})  } 
-                else return this.$store.state.userInfo
-            }
-        },
         created() {
-            
-        }
+            if(this.$store.state.userInfo && this.$store.state.userInfo != ""){
+                if(this.$store.state.userInfo.data && this.$store.state.userInfo.data != ""){
+                    if(this.$store.state.userInfo.data.decentralise == "t") return this.$router.back()
+                } else return false
+            } else return false
+        },
     }
 </script>

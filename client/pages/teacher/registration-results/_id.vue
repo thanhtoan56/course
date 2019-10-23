@@ -12,14 +12,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="main-card mb-3 card">
-                    <div class="card-header">Active Users
-                        <div class="btn-actions-pane-right">
-                            <div role="group" class="btn-group-sm btn-group">
-                                <button class="active btn btn-focus">Last Week</button>
-                                <button class="btn btn-focus">All Month</button>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="card-header">Kết quả đăng ký</div>
                     <div class="table-responsive">
                         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                             <thead>
@@ -205,9 +198,19 @@
         created() {
             this.getAllProjectType()
             this.getAllProject()
+            this.checkUserPermission()
         },
 
         methods:{
+            
+            checkUserPermission(){
+                if(this.$store.state.userInfo && this.$store.state.userInfo != ""){
+                    if(this.$store.state.userInfo.data && this.$store.state.userInfo.data != ""){
+                        if(this.$store.state.userInfo.data.decentralise == "s") return this.$router.back()
+                    } else return false
+                } else return false
+            },
+
             hideFormPrint(){
                 this.emptyForm()
                 this.$modal.hide("FormPrintResult")
@@ -347,7 +350,7 @@
                 
                 axios.post(`${this.$store.state.apiLink}/registration/list-registration-teacher`,{
                     "subjectCode": this.$route.params.id,
-                    "teacherCode": this.$store.state.userInfo.data.code
+                    "token": localStorage.token || null
                 })
                 .then(res => {
                     if(res.data.successes){

@@ -12,10 +12,16 @@
                     <span>Giảng viên</span>
                 </a>
             </li>
-            <li class="nav-item" @click="isShowFormAdd()">
-                <a role="tab" class="nav-link show active" id="tab-2" data-toggle="tab" href="#tab-content-2" aria-selected="true">
-                    <span>Thêm mới</span>
-                </a>
+            <li class="nav-item">
+                <div class="dropdown d-inline-block">
+                    <a role="tab" class="mb-2 mr-2 nav-link show active" id="tab-2" data-toggle="dropdown" href="#tab-content-2" aria-selected="true">
+                        <span>Thêm mới</span>
+                    </a>
+                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 33px, 0px);">
+                        <button type="button" tabindex="0" class="dropdown-item" @click="showFormFile()">Thêm bằng file</button>
+                        <button type="button" tabindex="0" class="dropdown-item" @click="isShowFormAdd()">Thêm từng user</button>
+                    </div>
+                </div>
             </li>
         </ul>
 
@@ -43,25 +49,13 @@
                             <option value="student">Sinh viên</option>
                             <option value="header">Trưởng bộ môn</option>
                         </select>
-                </div>
-                </div>
-                <!-- <div class="position-relative row form-group">
-                    <label for="exampleFile" class="col-sm-3 col-form-label">File</label>
-                    <div class="col-sm-9"><input name="file" id="exampleFile" type="file" class="form-control-file">
-                        <small class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
                     </div>
-                </div> -->
+                </div>
                 <div class="position-relative row form-check">
                     <div style="text-align: center;">
                         <button class="btn btn-secondary" @click="cancelAdd()">Cancel</button>
                         <button class="btn btn-success" @click="addUser()">Submit</button>
                     </div>
-                </div>
-            </div>
-            
-            <div class="card-body" v-if="!isFormFile">
-                <div class="position-relative row form-check">
-                    <button class="btn btn-success" @click="showFormFile()">Thêm User bằng file</button>
                 </div>
             </div>
 
@@ -78,11 +72,11 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="position-relative row form-group">
-                    <label class="col-sm-3 col-form-label">File</label>
+                    <label for="exampleFile" class="col-sm-3 col-form-label">File</label>
                     <div class="col-sm-9">
-                        <input type="file" id="fileMain" class="form-control">
+                        <input type="file" id="fileMain" name="file" class="form-control-file">
+                        <small class="form-text text-muted">Vui lòng chọn file</small>
                     </div>
                 </div>
                 <div class="position-relative row form-check">
@@ -97,14 +91,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="main-card mb-3 card">
-                    <div class="card-header">Danh sách user
-                        <div class="btn-actions-pane-right">
-                            <div role="group" class="btn-group-sm btn-group">
-                                <button class="active btn btn-focus">Last Week</button>
-                                <button class="btn btn-focus">All Month</button>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="card-header">Danh sách user</div>
                     <div class="table-responsive">
                         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                             <thead>
@@ -116,7 +103,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <tr v-for="(item, index) in data" :key="index">
                                     <td class="text-center text-muted">#{{index + 1}}</td>
                                     <td class="text-center">{{item.code}}</td>
@@ -125,7 +111,7 @@
                                             <div class="widget-content-wrapper">
                                                 <div class="widget-content-left flex2">
                                                     <div class="widget-heading">{{item.fullName}}</div>
-                                                    <div class="widget-subheading opacity-7">Web Developer</div>
+                                                    <div class="widget-subheading opacity-7">{{getDecentralise(item)}}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -139,24 +125,26 @@
                                         </button>
                                     </td>
                                 </tr>
-                                
                             </tbody>
                         </table>
                     </div>
-                    <!-- <div class="d-block text-center card-footer">
-                        <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i class="pe-7s-trash btn-icon-wrapper"> </i></button>
-                        <button class="btn-wide btn btn-primary">Lưu</button>
-                    </div> -->
+                    <div class="d-block text-center card-footer">
+                        <!-- <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i class="pe-7s-trash btn-icon-wrapper"> </i></button>
+                        <button class="btn-wide btn btn-primary">Lưu</button> -->
+                    </div>
                 </div>
             </div>
         </div>
-
         
         <modal name="Modal_FormUpdateUser" style="margin-top: 60px;" width="400px" height="auto" :scrollable="true">
-            <div class="image_logo">
-                <div class="card card-small mb-4" style="margin-bottom: 0!important">
-                    <div class="main-card card" >
-                        <div class="card-body">
+            <div class="modal" style="display: block; padding-left: 0px; top:60px;">
+                <div class="modal-dialog modal-lg" style="max-width: 400px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Chi tiết user</h5>
+                            <button class="close" @click="hidenFormUpdateUser()"> <span>×</span> </button>
+                        </div>
+                        <div class="modal-body">
                             <h5 class="card-title">Update user</h5>
                             <div class="form-row">
                                 <div class="col-md-12">
@@ -185,38 +173,37 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div style="text-align: center; padding: 10px 0;">
-                        <button style="max-width: 50%" class="btn btn-secondary" @click="hidenFormUpdateUser()">Cancel</button>
-                        <button style="max-width: 50%" class="btn btn-success" @click="updateUser()">Submit</button>
+                        <div class="modal-footer">
+                            <button style="max-width: 50%" class="btn btn-secondary" @click="hidenFormUpdateUser()">Cancel</button>
+                            <button style="max-width: 50%" class="btn btn-success" @click="updateUser()">Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </modal>
         
         <modal class="delete" name="FormDeleteUser" style="margin-top: 60px;" width="400px" height="auto" :scrollable="true">
-            <div class="card card-small form-delete-user">
-                <div class="card-header border-bottom">
-                    <h6 class="m-0">Xác nhận</h6>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item p-3">
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-row">
-                                    <label>Bạn có muốn xóa: <i><b>{{this.fullName}} ?</b></i></label>
-                                </div>
-                            <div class="button-delete-user" style="text-align: center;">
-                                <button class="btn btn-accent btn-primary" @click="hidenFormDeleteUser()">Cancel</button>
-                                <button class="btn btn-accent btn-danger" @click="deleteUser(idNumberUser)">Delete</button>
-                            </div>
+            <div class="modal" style="display: block; padding-left: 0px; top:60px;">
+                <div class="modal-dialog modal-lg" style="max-width: 400px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Xác nhận</h5>
+                            <button class="close" @click="hidenFormDeleteUser()"> <span>×</span> </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <label>Bạn có muốn xóa: <i><b>{{this.fullName}} ?</b></i></label>
                             </div>
                         </div>
-                    </li>
-                </ul>
+                        <div class="modal-footer">
+                            <button class="btn btn-accent btn-primary" @click="hidenFormDeleteUser()">Cancel</button>
+                            <button class="btn btn-accent btn-danger" @click="deleteUser(idNumberUser)">Delete</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </modal>
-    </div>                     
+    </div>
 </template>
 
 <script>
@@ -264,6 +251,14 @@
 			
         },
         methods:{
+            getDecentralise(item){
+                if(item.headOfChemistry == "y") return "Trưởng bộ môn"
+                else {
+                    if(item.decentralise == "a") return "Admin"
+                    if(item.decentralise == "a") return "Admin"
+                    else return "Sinh viên"
+                }
+            },
             addUserByFile(){
                 console.log(this.decentralise)
                 console.log(this.headOfChemistry)
@@ -294,7 +289,8 @@
                 this.isShowForm = false
             },
             showFormFile(){
-                this.isFormFile = !this.isFormFile
+                this.isFormFile = true
+                this.isShowForm = true
             },
             deleteUser(idNumber) {
                 axios.post(`${this.$store.state.apiLink}/user/delete`, { "token": localStorage.token || "", "idNumber": idNumber, })
@@ -405,11 +401,13 @@
             },
 
         	isShowFormAdd(){
-                this.isShowForm = !this.isShowForm
+                this.isShowForm = true
+                this.isFormFile = false
             },
 
             cancelAdd(){
                 this.emptyForm()
+                this.isFormFile = false
                 this.isShowForm = false
             },
 

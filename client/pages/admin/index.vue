@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12">
                 <div class="main-card mb-3 card">
                     <div class="card-header">Danh sách môn học
@@ -146,12 +146,12 @@
                         </table>
                     </div>
                     <div class="d-block text-center card-footer">
-                        <!-- <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i class="pe-7s-trash btn-icon-wrapper"> </i></button> -->
+                        <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i class="pe-7s-trash btn-icon-wrapper"> </i></button>
                         <button class="btn-wide btn btn-primary">Thêm môn học</button>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>

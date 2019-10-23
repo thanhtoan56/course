@@ -1,11 +1,7 @@
 <template>
     <div>
+        <notifications group="auth" style="margin-top:62px" />
         <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
-            <!-- <li class="nav-item">
-                <a role="tab" class="nav-link show" id="tab-0" data-toggle="tab" href="#tab-content-0" aria-selected="false">
-                    <span>Toastr Alerts</span>
-                </a>
-            </li> -->
             <li class="nav-item" @click="ShowFormAdd()">
                 <a role="tab" class="nav-link show active" id="tab-2" data-toggle="tab" href="#tab-content-2" aria-selected="true">
                     <span>Thêm mới</span>
@@ -16,14 +12,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="main-card mb-3 card">
-                    <div class="card-header">Active Users
-                        <div class="btn-actions-pane-right">
-                            <div role="group" class="btn-group-sm btn-group">
-                                <button class="active btn btn-focus">Last Week</button>
-                                <button class="btn btn-focus">All Month</button>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="card-header">Danh sách loại đề tài của môn</div>
                     <div class="table-responsive">
                         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                             <thead>
@@ -51,22 +40,22 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- <div class="d-block text-center card-footer">
-                        <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i class="pe-7s-trash btn-icon-wrapper"> </i></button>
-                        <button class="btn-wide btn btn-success">Save</button>
-                    </div> -->
+                    <div class="d-block text-center card-footer">
+                        <!-- <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i class="pe-7s-trash btn-icon-wrapper"> </i></button>
+                        <button class="btn-wide btn btn-success">Save</button> -->
+                    </div>
                 </div>
             </div>
         </div>
         
         <modal name="FormAddProjectType" style="margin-top: 60px;" width="400px" height="auto" :scrollable="true">
-            <div class="image_logo">
-                <div class="card card-small mb-4" style="margin-bottom: 0!important">
-                    <div class="main-card card" >
-                        <notifications group="auth" style="margin-top:62px" />
-                        <div class="card-body">
+            <div class="modal" style="display: block; padding-left: 0px; top:60px;">
+                <div class="modal-dialog modal-lg" style="max-width: 400px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
                             <h5 class="card-title">Thêm loại đề tài</h5>
-                            
+                        </div>
+                        <div class="modal-body">
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <div class="position-relative form-group">
@@ -75,10 +64,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="text-align: center;">
-                                <button style="max-width: 50%" class="btn btn-secondary" @click="cancelAdd()">Cancel</button>
-                                <button style="max-width: 50%" class="btn btn-success" @click="addProjectType()">Submit</button>
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button style="max-width: 50%" class="btn btn-secondary" @click="cancelAdd()">Cancel</button>
+                            <button style="max-width: 50%" class="btn btn-success" @click="addProjectType()">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -86,13 +75,13 @@
         </modal>
 
         <modal name="FormUpdateProjectType" style="margin-top: 60px;" width="400px" height="auto" :scrollable="true">
-            <div class="image_logo">
-                <div class="card card-small mb-4" style="margin-bottom: 0!important">
-                    <div class="main-card card" >
-                        <notifications group="auth" style="margin-top:62px" />
-                        <div class="card-body">
-                            <h5 class="card-title">Thêm loại đề tài</h5>
-                            
+            <div class="modal" style="display: block; padding-left: 0px; top:60px;">
+                <div class="modal-dialog modal-lg" style="max-width: 400px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="m-0">Update loại đề tài</h6>
+                        </div>
+                        <div class="modal-body">
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <div class="position-relative form-group">
@@ -101,10 +90,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="text-align: center;">
-                                <button style="max-width: 50%" class="btn btn-secondary" @click="cancelUpdate()">Cancel</button>
-                                <button style="max-width: 50%" class="btn btn-success" @click="updateProjectType()">Submit</button>
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button style="max-width: 50%" class="btn btn-secondary" @click="cancelUpdate()">Cancel</button>
+                            <button style="max-width: 50%" class="btn btn-success" @click="updateProjectType()">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -112,26 +101,23 @@
         </modal>
 
         <modal name="FormDeleteProjectType" style="margin-top: 60px;" width="400px" height="auto" :scrollable="true">
-            <notifications group="auth" style="margin-top:62px" />
-            <div class="card card-small form-delete-user">
-                <div class="card-header border-bottom">
-                    <h6 class="m-0">Xác nhận</h6>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item p-3">
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-row">
-                                    <label>Bạn có muốn xóa: <i><b>{{projectTypeName}} ?</b></i></label>
-                                </div>
-                                <div class="button-delete-user" style="text-align: center;">
-                                    <button class="btn btn-accent btn-primary" @click="cancelDelete()">Cancel</button>
-                                    <button class="btn btn-accent btn-danger" @click="deleteProjectType(idNumber)">Delete</button>
-                                </div>
+            <div class="modal" style="display: block; padding-left: 0px; top:60px;">
+                <div class="modal-dialog modal-lg" style="max-width: 400px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="m-0">Xác nhận</h6>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <label>Bạn có muốn xóa: <i><b>{{projectTypeName}} ?</b></i></label>
                             </div>
                         </div>
-                    </li>
-                </ul>
+                        <div class="modal-footer">
+                            <button class="btn btn-accent btn-primary" @click="cancelDelete()">Cancel</button>
+                            <button class="btn btn-accent btn-danger" @click="deleteProjectType(idNumber)">Delete</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </modal>
     </div>
@@ -162,10 +148,19 @@
         },
         created() {
             this.getAllProjectType()
+            this.checkUserPermission()
         },
         methods:{
+
+            checkUserPermission(){
+                if(this.$store.state.userInfo && this.$store.state.userInfo != ""){
+                    if(this.$store.state.userInfo.data && this.$store.state.userInfo.data != ""){
+                        if(this.$store.state.userInfo.data.decentralise == "s") return this.$router.back()
+                    } else return false
+                } else return false
+            },
+
             deleteProjectType(idNumber) {
-                
                 axios.post(`${this.$store.state.apiLink}/projectstype/remove-projectstype`, {
                     "idNumber": idNumber,
                     "token": localStorage.token || ""
@@ -173,7 +168,7 @@
                 .then(res => {
                     if(res.data.successes){
                         this.$notify({group: 'auth', title: 'Notice', text: 'Delete success',type: 'success'});
-                        setTimeout(()=> { this.$modal.hide('FormDeleteProjectType') }, 1000)
+                        this.$modal.hide('FormDeleteProjectType')
                         this.getAllProjectType()
                     } else {
                         this.$notify({group: 'auth',title: 'Notice', text: res.data.reason, type: 'warn'})
@@ -195,7 +190,8 @@
             updateProjectType() {
                 if(this.projectTypeName == "" ){
                     return this.$notify({group: 'auth',title: 'Notice', text: "Điền đầy đủ thông tin !",type: 'warn'})
-                } else {
+                } 
+                else {
                     axios.post(`${this.$store.state.apiLink}/projectstype/update-projectstype`, {
                         "projectTypeName": this.projectTypeName,
                         "idNumber": this.idNumber,
@@ -204,7 +200,7 @@
                     .then(res => {
                         if(res.data.successes){
                             this.$notify({group: 'auth', title: 'Notice', text: 'Update success',type: 'success'});
-                            setTimeout(()=> { this.$modal.hide('FormUpdateProjectType') }, 1000)
+                            this.$modal.hide('FormUpdateProjectType')
                             this.getAllProjectType()
                         } else {
                             this.$notify({group: 'auth',title: 'Notice', text: res.data.reason, type: 'warn'})
@@ -241,7 +237,8 @@
                 
                 if(this.projectTypeName == "" ){
                     return this.$notify({group: 'auth',title: 'Notice', text: "Điền đầy đủ thông tin !",type: 'warn'})
-                } else {
+                } 
+                else {
                     axios.post(`${this.$store.state.apiLink}/projectstype/add-projectstype`, {
                         "projectTypeName": this.projectTypeName,
                         "subjectCode": this.$route.params.id,
@@ -250,7 +247,7 @@
                     .then(res => {
                         if(res.data.successes){
                             this.$notify({group: 'auth', title: 'Notice', text: 'Add projectstype success',type: 'success'});
-                            setTimeout(()=> { this.$modal.hide('FormAddProjectType') }, 1000)
+                            this.$modal.hide('FormAddProjectType')
                             this.getAllProjectType()
                         } else {
                             this.$notify({group: 'auth',title: 'Notice', text: res.data.reason, type: 'warn'})
@@ -260,12 +257,9 @@
             },
             
             getAllProjectType() {
-                
                 axios.get(`${this.$store.state.apiLink}/projectstype/list-projectstype`)
                 .then(res => {
-                    if(res.data.successes){
-                        this.data = res.data.data
-                    } 
+                    if(res.data.successes){ this.data = res.data.data } 
                 })
                 .catch(err => err);
             },

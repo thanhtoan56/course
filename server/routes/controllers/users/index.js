@@ -224,28 +224,29 @@ router.post('/add', async (req, res) => {
 // update passWord
 router.post('/change-password', async (req, res) => {
     
-    const { token, idNumber, passWordOld, passWordNew } = req.body;
-    var user = {"passWord": passWordNew}
+    const { token, passWordOld, passWordNew } = req.body;
+    var user = {"passWord": sha256(String(passWordNew))}
     
-    if(!token || !idNumber || !passWordOld || !passWordNew) return res.status(200).json({successes: false, reason:"Enter your full information"})
+    if(!token || !passWordOld || !passWordNew) return res.status(200).json({successes: false, reason:"Enter your full information"})
 
     const checkToken = await check.checkToken(token)
     if(!checkToken.successes) return res.json({"successes":false, reason: checkToken.reason})
     const checkUser = checkToken.data;
     
-    var dataUserDetail = await getUserDetail(idNumber)
-    if(dataUserDetail == "" || dataUserDetail == undefined || dataUserDetail == null) return res.status(200).json({successes:false, "reason":"User is not define"})
+    var dataUserDetail = await getUserDetail(checkUser.idNumber)
+    if(!dataUserDetail) return res.status(200).json({successes:false, "reason":"User is not define"})
     
     if(checkUser.idNumber != dataUserDetail.idNumber){
         if(checkUser.decentralise != "a") return res.status(200).json({"successes":false,"reason":"User is not defined"})
     }
-    if(checkUser.passWord != passWordOld || dataUserDetail.passWord != passWordOld) return res.status(200).json({"successes":false,"reason":"Password is incorrect"})
+    if(checkUser.passWord != sha256(String(passWordOld)) || dataUserDetail.passWord != sha256(String(passWordOld))) return res.status(200).json({"successes":false,"reason":"Password is incorrect"})
     
     // Bat dau update
-    let data = await Users.findOneAndUpdate({"idNumber":idNumber}, user, {new: true})
+    let data = await Users.findOneAndUpdate({"idNumber":checkUser.idNumber}, user, {new: true})
     if(!data ) return res.status(200).json({successes: false, reason: "Change password is not successes" })
-    return res.status(200).json({successes:true, data})
+    return res.status(200).json({successes:true})
 });
+
 // Update user 
 router.post('/update', async (req, res) => {
     

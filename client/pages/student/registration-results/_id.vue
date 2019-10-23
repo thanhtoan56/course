@@ -171,9 +171,18 @@
         created() {
             this.getAllProjectType()
             this.getAllProject()
+            this.checkUserPermission()
         },
 
         methods:{
+
+            checkUserPermission(){
+                if(this.$store.state.userInfo && this.$store.state.userInfo != ""){
+                    if(this.$store.state.userInfo.data && this.$store.state.userInfo.data != ""){
+                        if(this.$store.state.userInfo.data.decentralise == "t") return this.$router.back()
+                    } else return false
+                } else return false
+            },
 
             ratifyProject(idNumber){
                 axios.post(`${this.$store.state.apiLink}/project/ratify-project`, {
@@ -248,7 +257,7 @@
                 
                 axios.post(`${this.$store.state.apiLink}/registration/list-registration`,{
                     "subjectCode": this.$route.params.id,
-                    "leaderCode": this.$store.state.userInfo.data.code
+                    "memberCode": this.$store.state.userInfo.data.code
                 })
                 .then(res => {
                     if(res.data.successes){

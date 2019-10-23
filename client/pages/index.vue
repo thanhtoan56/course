@@ -1,7 +1,6 @@
 <template>
     <div>
-
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12 col-lg-6">
                 <div class="mb-3 card">
                     <div class="card-header-tab card-header-tab-animation card-header">
@@ -259,7 +258,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="row">
             <div class="col-md-12">
                 <div class="main-card mb-3 card">
@@ -391,8 +389,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-       
+        </div> -->
     </div>
 </template>
 <script>

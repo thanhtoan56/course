@@ -23,22 +23,33 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 // get registration for teacher
 router.post('/list-registration-teacher', async (req, res) => {
-    const { subjectCode, teacherCode } = req.body;
-    await Registrations.find({"subjectCode":subjectCode, "teacherCode": teacherCode},{ _id:0, __v:0}).sort({idNumber: -1})
-    .then(result => res.status(200).json({"successes":true,"data":result}))
-    .catch((err) => res.status(200).json({"successes":false,"reason":err}));
+    const { subjectCode, token } = req.body;
+    
+    const checkToken = await check.checkToken(token)
+    if(!checkToken.successes) return res.json({"successes":false, reason: checkToken.reason})
+    const checkUser = checkToken.data;
+    
+    if(checkUser.decentralise == "a" || checkUser.headOfChemistry == "y") {
+        await Registrations.find({"subjectCode":subjectCode},{ _id:0, __v:0}).sort({idNumber: -1})
+        .then(result => res.status(200).json({"successes":true,"data":result}))
+        .catch((err) => res.status(200).json({"successes":false,"reason":err}));
+    } else {
+        await Registrations.find({"subjectCode":subjectCode, "teacherCode": checkUser.code},{ _id:0, __v:0}).sort({idNumber: -1})
+        .then(result => res.status(200).json({"successes":true,"data":result}))
+        .catch((err) => res.status(200).json({"successes":false,"reason":err}));
+    }
 });
 
 // get registration for student
 router.post('/list-registration', async (req, res) => {
-    const { subjectCode, leaderCode } = req.body;
+    const { subjectCode, memberCode } = req.body;
 
     var result = []
     var registrations = await Registrations.find({"subjectCode":subjectCode},{ _id:0, __v:0}).sort({idNumber: -1})
 
     for(let i = 0; i < registrations.length; i++){ 
         for(let j = 0; j < registrations[i].members.length; j++){  
-            if(registrations[i].members[j].memberCode == leaderCode) result.push(registrations[i])
+            if(registrations[i].members[j].memberCode == memberCode) result.push(registrations[i])
         }
     }
     return res.status(200).json({"successes":true, "data":result}) 
@@ -203,10 +214,10 @@ router.post('/export-download',async (req, res) => {
         });
         dataExcel.push(rowItemValue); // push tung dong value vao mang dataExcel
     }
-    let buffer = nodeXlsx.build([{name: "List User", data: dataExcel}]); // Returns a buffer
+    let buffer = nodeXlsx.build([{name: "Registrations", data: dataExcel}]); // Returns a buffer
     fs.writeFile('download/registrations.xlsx', buffer, function (err) {
-        if (err) return console.log(err);
-        else return res.status(200).json({"successes":true, data: "download/registrations.xlsx"})
+        if (err) return res.json({"successes":false, reason: err})
+        return res.status(200).json({"successes":true, data: "download/registrations.xlsx"})
     });
   });
   
