@@ -8,7 +8,7 @@ module.exports ={
   */
   head: {
     // title: pkg.name,
-    title: 'Khoa CNTT',
+    title: 'Khoa Công Nghệ Thông Tin - TDTU',
     meta: 
     [
       { charset: 'utf-8' },
@@ -24,9 +24,9 @@ module.exports ={
       { rel: 'stylesheet', href:'/styles/shards-dashboards.1.1.0.min.css'},
       { rel: 'stylesheet', href:'/styles/extras.1.1.0.min.css'},
       { rel: 'stylesheet', href:'/styles/font-awesome.min.css'},
-      // { rel: 'stylesheet', href:'/styles/app.css'},
-      // { rel: 'stylesheet', href:'/styles/style.css'},
+
       { rel: 'stylesheet', href:'/main.css'},
+      
       { rel: 'stylesheet', href:'/styles/owl.carousel.min.css'},
       { rel: 'stylesheet', href:'/styles/dataTables.min.css'},
       { rel: 'stylesheet', href:'/styles/jquery.mmenu.all.css'},
@@ -45,7 +45,6 @@ module.exports ={
       {src: '/js/extras.1.1.0.min.js'},
       {src: '/js/owl.carousel.min.js'},
       {src: '/js/jquery.mmenu.all.js'},
-      // {src: 'https://buttons.github.io/buttons.js'},
     ]
   },
 

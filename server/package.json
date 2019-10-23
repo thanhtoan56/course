@@ -1,13 +1,13 @@
 {
-  "name": "bloodshop",
+  "name": "course",
   "version": "1.0.0",
-  "description": "",
+  "description": "REGISTRATION PAGE SUBJECT - IT DOCUMENT DISSERTATION",
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
-  "author": "",
+  "author": "nguyen thanh toan",
   "license": "ISC",
   "devDependencies": {
     "body-parser": "^1.18.3",

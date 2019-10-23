@@ -24,7 +24,7 @@
                 <div class="app-footer-right">
                     <ul class="nav">
                         <li class="nav-item">
-                            <a target="_blank" href="https://www.facebook.com/nguyenthanh.toan.68" class="nav-link">Copyright © NguyenThanhToan 2019</a> 
+                            <a target="_blank" href="https://www.facebook.com/nguyenthanhtoan.79" class="nav-link">Copyright © NguyenThanhToan 2019</a> 
                         </li>
                         <!-- <li class="nav-item">
                             <a href="javascript:void(0);" class="nav-link">

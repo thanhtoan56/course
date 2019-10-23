@@ -17,7 +17,6 @@
         <div class="main-card mb-3 card" v-if="isShowFormAdd">
             <div class="card-body">
                 <h5 class="card-title">Thêm đề tài mới</h5>
-                
                 <div class="position-relative row form-group">
                     <label for="examplePassword" class="col-sm-2 col-form-label">Tên đề tài</label>
                     <div class="col-sm-10">
@@ -28,7 +27,7 @@
                     <label for="exampleSelect" class="col-sm-2 col-form-label">Loại đề tài</label>
                     <div class="col-sm-10">
                         <select class="form-control" @change="onChang()">
-                            <option :value="idNumberProjectType">Loại đề tài</option>  
+                            <option :value="idNumberProjectType">Loại đề tài</option>
                             <option v-for="item in listType" 
                                 :key="item.idNumber" 
                                 :value="item.idNumber" 
