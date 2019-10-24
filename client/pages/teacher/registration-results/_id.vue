@@ -235,6 +235,7 @@
                     })
                     .then(res => {
                         var link = res.data.data
+                        // console.log(link)
                         axios({
                             url: `${this.$store.state.apiApp}${link}`,
                             method: 'GET',
@@ -253,7 +254,6 @@
                             this.getAllProjectType()
                             this.getAllProject()
                         });
-                        
                     })
                 }
             },

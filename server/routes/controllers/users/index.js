@@ -76,9 +76,8 @@ router.post('/add-many', upload, async (req, res) => {
             else { index = result.index; }
 
             var md5Done = md5(String(data[j].MSSV))
-            // console.log(md5Done)
             var sha256Done = sha256(md5Done)
-            // console.log(sha256Done)
+            
             var user = new Users({
                 "idNumber": index,
                 "fullName": data[j].FullName,
