@@ -42,12 +42,14 @@
                 <div class="position-relative row form-group">
                     <label for="exampleText" class="col-sm-2 col-form-label">Mục tiêu đề tài</label>
                     <div class="col-sm-10">
+                        <!-- <textarea class="form-control" rows="6" :html="editorHtml" id="target" ref="projectTarget" ></textarea> -->
                         <editor :html="editorHtml" mode="wysiwyg" :value="editorText" ref="projectTarget" v-model="projectTarget"/>
                     </div>
                 </div>
                 <div class="position-relative row form-group">
                     <label for="exampleText" class="col-sm-2 col-form-label">Yêu cầu kiến thức</label>
                     <div class="col-sm-10">
+                        <!-- <textarea class="form-control" rows="6" :html="editorHtml" id="require" ref="projectRequire" ></textarea> -->
                         <editor :html="editorHtml" mode="wysiwyg" :value="editorText" ref="projectRequire" v-model="projectRequire"/>
                     </div>
                 </div>
@@ -228,7 +230,8 @@
     import 'tui-editor/dist/tui-editor.css';
     import 'tui-editor/dist/tui-editor-contents.css';
     import 'codemirror/lib/codemirror.css';
-    import Editor from '@toast-ui/vue-editor/src/editor.vue'
+    // import Editor from '@toast-ui/vue-editor/src/editor.vue'
+    import { Editor } from '@toast-ui/vue-editor'
     
     import VModal from 'vue-js-modal';
     Vue.use(VModal);    
@@ -402,7 +405,15 @@
             addProject() {
                 this.projectTarget = this.$refs.projectTarget.invoke('getHtml')
                 this.projectRequire = this.$refs.projectRequire.invoke('getHtml')
+
+                // this.projectTarget = this.$refs.projectTarget
+                // this.projectRequire = this.$refs.projectRequire
+
+                // this.projectTarget = document.getElementById("target").value ;
+                // this.projectRequire = document.getElementById("require").value ;
                 
+                // console.log(this.projectTarget)
+                // console.log(this.projectTarget)
                 if(this.projectTypeName == "" || this.projectName == "" || this.projectTarget == "" || this.projectRequire == ""){
                     return this.$notify({group: 'auth',title: 'Notice', text: "Điền đầy đủ thông tin !",type: 'warn'})
                 } else {

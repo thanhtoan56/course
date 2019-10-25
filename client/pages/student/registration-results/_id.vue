@@ -130,10 +130,6 @@
 	import Notifications from 'vue-notification'
 	import Toaster from 'v-toaster'
     import 'v-toaster/dist/v-toaster.css'
-    import 'tui-editor/dist/tui-editor.css';
-    import 'tui-editor/dist/tui-editor-contents.css';
-    import 'codemirror/lib/codemirror.css';
-    import Editor from '@toast-ui/vue-editor/src/editor.vue'
     
     import VModal from 'vue-js-modal';
     Vue.use(VModal);    
@@ -143,10 +139,8 @@
 
 	Vue.use(Toaster, {timeout: 10000})
 	Vue.use(Notifications)
-    var md5 = require('md5');
     
     export default {
-        components: { 'editor': Editor },
         data(){
         	return{
                 listType:[],
@@ -160,9 +154,6 @@
                 teacherCode: "", 
                 projectTarget: "", 
                 projectRequire: "",
-
-                editorText: "",
-                editorHtml: "",
 
                 project:""
         	}

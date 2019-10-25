@@ -22,7 +22,6 @@ const tool_insert_index_collection = require('../functions/insert_index_collecti
 const Users = require('../../../db/models/users/userSchema');
 const indexS = require('../../../db/models/indexs/indexsSchema');
 const Tokens = require('../../../db/models/tokens/tokensSchema');
-const { Authentications } = require('../../../db/models/authentications/authenticationsSchema');
 const { sendEmail, hashAuthen } = require('../../../config/app');
 
 router.use(express.json());

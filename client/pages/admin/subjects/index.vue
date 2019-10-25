@@ -171,7 +171,6 @@
 	
 	Vue.use(Toaster, {timeout: 10000})
 	Vue.use(Notifications)
-    var md5 = require('md5');
     
     export default {
         data(){

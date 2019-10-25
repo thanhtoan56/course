@@ -155,8 +155,6 @@
     </div>
 </template>
 <script>
-    import {mapGetters} from 'vuex';
-    
     export default {
         mounted(){
             if ( !this.$store.state.userInfo.successes) { this.$router.push({path:'/login'})  } 

@@ -84,10 +84,9 @@ import Vue from "vue";
 import Header from '~/components/header';
 import Sidebar from '~/components/sidebar';
 import Footer from '~/components/footer';
-import scrollRestoration from '~/functions/scrollRestoration'
 
 export default {
-    components:{ Header, Sidebar, Footer, },
+    components:{ Header, Sidebar, Footer },
 
     created() {
         this.$nuxt.$on("hideSidebar", data => {

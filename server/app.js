@@ -79,7 +79,13 @@ app.get("/:id", function(req, res) {
     res.sendFile(__dirname + `/uploads/avatars/${image}`);
 });
 
-const port = process.env.PORT || 8000; //set port 
-server.listen(port, () =>{
-    console.log("Server is up port: " + port);
+// const port = process.env.PORT || 8000; //set port 
+// server.listen(port, () =>{
+//     console.log("Server is up port: " + port);
+// });
+
+const port = process.env.PORT || 8000;
+
+app.listen(port, () => {
+  console.log(`Server listening on port: ${port}`);
 });

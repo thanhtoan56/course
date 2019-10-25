@@ -17,15 +17,6 @@ const projectsSchema = new mongoose.Schema({
     projectRequire: {type: String },
 
     isRatify:{type: String, default: "N"},
-    // teams: { type: Array, default: []},
-
-    // [
-    //     {
-    //         leaderCode: {type: String },
-    //         leaderName: {type: String },
-    //         members:    [{memberCode:    String, memberName: String}]
-    //     }
-    // ]
   
     created_at:{ type: Number, default: parseInt( new Date().getTime() / 1000 ) },
     updated_at:{ type: Number, default: parseInt( new Date().getTime() / 1000 ) }
