@@ -118,7 +118,7 @@
 
         <modal name="FormPrintResult" height="auto" :scrollable="true">
             <div class="modal" style="display: block; padding-left: 0px; top:60px;">
-                <div class="modal-dialog modal-lg" style="width: 300px;">
+                <div class="modal-dialog modal-lg" style="width: 300px; margin: 5px auto;">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Chi tiết</h5>

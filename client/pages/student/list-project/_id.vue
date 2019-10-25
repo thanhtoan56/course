@@ -99,7 +99,7 @@
 
         <modal name="FormRegistration" height="auto" :scrollable="true">
             <div class="modal" style="display: block; padding-left: 0px; top:60px;">
-                <div class="modal-dialog modal-lg" style="height: 85%;">
+                <div class="modal-dialog modal-lg" style="height: 85%; z-index: 99999999;">
                     <div class="modal-content" style="height: 100%;">
                         <div class="modal-header">
                             <h5 class="modal-title">Chi tiết</h5>

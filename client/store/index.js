@@ -7,8 +7,7 @@ Vue.use(VueCookies)
 Vue.use(Vuex);
 
 export let state = () => ({
-    // apiLink: "http://192.168.1.2:8000/api",
-    // apiApp: "http://192.168.1.2:8000/", 
+
     // apiLink: "http://localhost:8000/api",
     // apiApp: "http://localhost:8000/", 
 

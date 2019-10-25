@@ -12,7 +12,7 @@
                                     <!-- <i class="pe-7s-car icon-gradient bg-mean-fruit"></i> -->
                                     <img src="/assets/images/cntt.png" alt="" style="max-width: 100%;">
                                 </div>
-                                <div>
+                                <div style="z-index: 0 !important;">
                                     <span style="font-weight: 600; color: #ed1c24;">TRANG ĐĂNG KÝ ĐỀ TÀI ĐỒ ÁN - LUẬN VĂN KHOA CNTT</span>
                                     <div class="page-title-subheading">Trường ĐH Tôn Đức Thắng</div>
                                     <div class="page-title-subheading">Khoa Công Nghệ Thông Tin</div>

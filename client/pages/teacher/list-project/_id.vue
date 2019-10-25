@@ -54,10 +54,8 @@
                     </div>
                 </div>
                 <div class="position-relative row form-check">
-                    <div class="col-sm-2 offset-sm-10">
-                        <button class="btn btn-secondary" @click="cancelAdd()">Cancel</button>
-                        <button class="btn btn-success" @click="addProject()">Submit</button>
-                    </div>
+                    <button class="btn btn-secondary" @click="cancelAdd()">Cancel</button>
+                    <button class="btn btn-success" @click="addProject()">Submit</button>
                 </div>
             </div>
         </div>
