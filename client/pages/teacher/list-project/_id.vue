@@ -230,18 +230,14 @@
     import 'tui-editor/dist/tui-editor.css';
     import 'tui-editor/dist/tui-editor-contents.css';
     import 'codemirror/lib/codemirror.css';
-    // import Editor from '@toast-ui/vue-editor/src/editor.vue'
     import { Editor } from '@toast-ui/vue-editor'
-    
     import VModal from 'vue-js-modal';
-    Vue.use(VModal);    
-    
     import VueTruncate from'vue-truncate-filter'
-    Vue.use(VueTruncate)
 
+    Vue.use(VModal);
+    Vue.use(VueTruncate)
 	Vue.use(Toaster, {timeout: 10000})
 	Vue.use(Notifications)
-    var md5 = require('md5');
     
     export default {
         components: { 'editor': Editor },

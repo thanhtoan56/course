@@ -165,10 +165,9 @@
 	import Notifications from 'vue-notification'
 	import Toaster from 'v-toaster'
     import 'v-toaster/dist/v-toaster.css'
-    
     import VModal from 'vue-js-modal';
+    
     Vue.use(VModal);    
-	
 	Vue.use(Toaster, {timeout: 10000})
 	Vue.use(Notifications)
     

@@ -179,13 +179,11 @@
 	import Notifications from 'vue-notification'
 	import Toaster from 'v-toaster'
     import 'v-toaster/dist/v-toaster.css'
-    
     import VModal from 'vue-js-modal';
-    Vue.use(VModal);
-    
     import VueTruncate from'vue-truncate-filter'
-    Vue.use(VueTruncate)
 
+    Vue.use(VModal);
+    Vue.use(VueTruncate)
 	Vue.use(Toaster, {timeout: 10000})
 	Vue.use(Notifications)
     

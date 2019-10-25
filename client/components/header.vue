@@ -42,8 +42,8 @@
                 </div>
             </div>
             <div class="app-header__menu">
-                <span>
-                    <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+                <span >
+                    <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav" @click="btnProfileShow()">
                         <span class="btn-icon-wrapper">
                             <i class="fa fa-ellipsis-v fa-w-6"></i>
                         </span>
@@ -202,6 +202,10 @@
         watch: { },
         
         methods: {
+            btnProfileShow(){
+                
+                $(".app-header__content").toggleClass("header-mobile-open")
+            },
 
             check() {
                 if(this.$store.state.userInfo && this.$store.state.userInfo != ""){
