@@ -21,7 +21,7 @@
     "@chenfengyuan/vue-number-input": "^1.1.1",
     "@fancyapps/fancybox": "^3.5.7",
     
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "babel-loader": "^8.0.6",
     "bootstrap": "^4.3.1",
     "bootstrap-touchspin": "^4.2.5",
